@@ -29,16 +29,6 @@ router.post("/escribir",[
     validarCampos
 ],httpClientes.postClientes)
 
-// router.post("/escribir/seguimiento/:id",[
-//   check('id','Se necesita un mongoid valido').isMongoId(),
-//   check('id').custom(helpersClientes.validarExistaIdcliente),
-//   check('peso', 'en digitos.').isNumeric().notEmpty(),
-//   check('imc', 'en digitos.').isNumeric().notEmpty(),
-//   check('brazo', 'en digitos.').isNumeric().notEmpty(),
-//   check('pierna', 'en digitos.').isNumeric().notEmpty(),
-//   check('edad', 'en digitos.').isNumeric().notEmpty(),
-//   validarCampos
-// ],httpClientes.postSeguimiento)
 
 router.put("/modificar/:id",[    
     check('nombre','El documento no puede estar vacio.').notEmpty(),
@@ -52,11 +42,6 @@ router.put("/modificar/:id",[
 router.put("/modificar/seguimiento/:id",[
   check('id','Se necesita un mongoid valido').isMongoId(),
   check('id').custom(helpersClientes.validarExistaIdcliente),
-  // check('peso', 'en digitos.').isNumeric().notEmpty(),
-  // check('imc', 'en digitos.').isNumeric().notEmpty(),
-  // check('brazo', 'en digitos.').isNumeric().notEmpty(),
-  // check('pierna', 'en digitos.').isNumeric().notEmpty(),
-  // check('edad', 'en digitos.').isNumeric().notEmpty(),
   validarCampos
 ],httpClientes.putClienteSeguimiento)
 

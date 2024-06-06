@@ -97,14 +97,14 @@ const httpUsuarios = {
       const user = await Usuario.findOne({ email });
 
       if (!user) {
-        console.log("hola");
+        // console.log("hola");
         return res.status(401).json({
           msg: "usuario o contraseña incorrecto",
         });
       }
 
       if (user.estado == 0) {
-        console.log("hola1");
+        // console.log("hola1");
         return res.status(401).json({
           msg: "usuario o contraseña incorrecto",
         });
@@ -112,7 +112,7 @@ const httpUsuarios = {
 
       const validacionpassword = bcryptjs.compareSync(password, user.password);
       if (!validacionpassword) {
-        console.log("hola123213");
+        // console.log("hola123213");
         return res.status(401).json({
           msg: "usuario o contraseña incorrecto",
         });

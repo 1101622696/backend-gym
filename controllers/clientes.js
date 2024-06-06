@@ -153,6 +153,30 @@ const httpClientes = {
     //     }
     // },
 
+
+    // este de abajo es el que sirve
+    // putClienteSeguimiento: async (req, res) => {
+    //     const { id } = req.params;
+    //     const { seguimiento } = req.body;
+    
+    //     try {
+    //         const cliente = await Cliente.findById(id);
+    //         if (!cliente) {
+    //             return res.status(404).json({ error: "Cliente no encontrado" });
+    //         }
+
+    //         cliente.seguimiento = seguimiento;
+    
+    //         await cliente.save();
+    
+    //         res.json({ message: "Seguimiento actualizado", cliente });
+    //     } catch (error) {
+    //         console.error("Error al actualizar el seguimiento", error);
+    //         res.status(500).json({ error: "Error interno del servidor" });
+    //     }
+    // },
+
+
     putClienteSeguimiento: async (req, res) => {
         const { id } = req.params;
         const { seguimiento } = req.body;
@@ -163,8 +187,7 @@ const httpClientes = {
                 return res.status(404).json({ error: "Cliente no encontrado" });
             }
     
-            // Actualiza el objeto de seguimiento completo con los nuevos datos proporcionados
-            cliente.seguimiento = seguimiento;
+            cliente.seguimiento.push(...seguimiento);
     
             await cliente.save();
     
@@ -174,6 +197,9 @@ const httpClientes = {
             res.status(500).json({ error: "Error interno del servidor" });
         }
     },
+    
+    
+    
     
 
     putClientesActivar: async (req, res) => {

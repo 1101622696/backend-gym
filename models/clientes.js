@@ -13,7 +13,7 @@ const clientesSchema = new mongoose.Schema({
   foto: { type: String, required: true },
   seguimiento: [
     {
-      fecha: { type: Date, required: true  },
+      fecha: { type: Date, default: Date.now() },
       peso: { type: Number, require: true },
       imc: { type: Number, require: true },
       brazo: { type: Number, require: true },
