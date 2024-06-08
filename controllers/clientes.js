@@ -202,18 +202,43 @@ const httpClientes = {
     
     
 
-    putClientesActivar: async (req, res) => {
-        const { id } = req.params
-        const cliente = await Cliente.findByIdAndUpdate(id, { estado: 1 }, { new: true })
-        res.json({ cliente })
+    // putClientesActivar: async (req, res) => {
+    //     const { id } = req.params
+    //     const cliente = await Cliente.findByIdAndUpdate(id, { estado: 1 }, { new: true })
+    //     res.json({ cliente })
+    // },
+    putClienteActivar: async (req, res) => {
+        const { id } = req.params;
+        try {
+            const cliente = await Cliente.findByIdAndUpdate(id, { estado: 1 }, { new: true });
+            if (!cliente) {
+                return res.status(404).json({ error: "Cliente no encontrado" });
+            }
+            res.json({ cliente });
+        } catch (error) {
+            console.error("Error al activar cliente", error);
+            res.status(500).json({ error: "Error interno del servidor" });
+        }
     },
 
-    putClientesDesactivar: async (req, res) => {
-        const { id } = req.params
-        const cliente = await Cliente.findByIdAndUpdate(id, { estado: 0 }, { new: true })
-        res.json({ cliente })
-    },
-
+    // putClientesDesactivar: async (req, res) => {
+    //     const { id } = req.params
+    //     const cliente = await Cliente.findByIdAndUpdate(id, { estado: 0 }, { new: true })
+    //     res.json({ cliente })
+    // },
+    putClienteDesactivar: async (req, res) => {
+        const { id } = req.params;
+        try {
+            const cliente = await Cliente.findByIdAndUpdate(id, { estado: 0 }, { new: true });
+            if (!cliente) {
+                return res.status(404).json({ error: "Cliente no encontrado" });
+            }
+            res.json({ cliente });
+        } catch (error) {
+            console.error("Error al desactivar cliente", error);
+            res.status(500).json({ error: "Error interno del servidor" });
+        }
+    }
 
 }
 export default httpClientes
