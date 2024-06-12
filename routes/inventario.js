@@ -3,10 +3,11 @@ import httpInventario from '../controllers/inventario.js'
 import { check } from 'express-validator'
 import { validarCampos } from '../middlewares/validar-campos.js'
 import helpersInventario from '../helpers/inventario.js'
+import {validarJWT} from '../middlewares/validar-jwt.js'
 
 const router=Router()
 
-router.get("/listar",httpInventario.getInventario)
+router.get("/listar",[validarJWT],httpInventario.getInventario)
 
 router.get("/listarid/:id",httpInventario.getInventarioID)
 router.get("/listaractivados",httpInventario.getInventarioactivado)

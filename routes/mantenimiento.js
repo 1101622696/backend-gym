@@ -3,10 +3,11 @@ import httpMantenimiento from '../controllers/mantenimiento.js'
 import { check } from 'express-validator'
 import { validarCampos } from '../middlewares/validar-campos.js'
 import helpersMantenimiento from '../helpers/mantenimiento.js'
+import {validarJWT} from '../middlewares/validar-jwt.js'
 
 const router=Router()
 
-router.get("/listar",httpMantenimiento.getMantenimiento)
+router.get("/listar",[validarJWT],httpMantenimiento.getMantenimiento)
 
 router.get("/listarid/:id",httpMantenimiento.getMantenimientoID)
 

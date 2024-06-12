@@ -3,10 +3,11 @@ import httpPagos from '../controllers/pagos.js'
 import { check } from 'express-validator'
 import { validarCampos } from '../middlewares/validar-campos.js'
 import helpersPagos from '../helpers/pagos.js'
+import {validarJWT} from '../middlewares/validar-jwt.js'
 
 const router=Router()
 
-router.get("/listar",httpPagos.getPagos)
+router.get("/listar",[validarJWT],httpPagos.getPagos)
 
 router.get("/listarid/:id",httpPagos.getPagosID)
 

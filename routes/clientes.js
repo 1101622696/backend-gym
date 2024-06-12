@@ -10,7 +10,7 @@ const router=Router()
 
 
 router.get("/listar",[validarJWT],httpClientes.getClientes)
-// router.get("/listar",httpClientes.getClientes)
+router.get("/listar",httpClientes.getClientes)
 router.get("/listar",httpClientes.getClientes)
 router.get("/listarid/:id",httpClientes.getClientesID)
 router.get("/seguimiento",httpClientes.getSeguimientoCliente)

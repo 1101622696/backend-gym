@@ -3,10 +3,11 @@ import httpIngresos from '../controllers/ingresos.js'
 import { check } from 'express-validator'
 import { validarCampos } from '../middlewares/validar-campos.js'
 import helpersIngresos from '../helpers/ingresos.js'
+import {validarJWT} from '../middlewares/validar-jwt.js'
 
 const router=Router()
 
-router.get("/listar",httpIngresos.getIngresos)
+router.get("/listar",[validarJWT],httpIngresos.getIngresos)
 
 router.get("/listarid/:id",httpIngresos.getIngresosID)
 

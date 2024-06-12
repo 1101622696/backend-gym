@@ -3,10 +3,11 @@ import httpMaquinas from '../controllers/maquinas.js'
 import { check } from 'express-validator'
 import { validarCampos } from '../middlewares/validar-campos.js'
 import helpersMaquinas from '../helpers/maquinas.js'
+import {validarJWT} from '../middlewares/validar-jwt.js'
 
 const router=Router()
 
-router.get("/listar",httpMaquinas.getMaquinas)
+router.get("/listar",[validarJWT],httpMaquinas.getMaquinas)
 router.get("/listarid/:id",httpMaquinas.getMaquinasID)
 router.get("/listaractivadas",httpMaquinas.getMaquinasactivadas)
 router.get("/listardesactivadas",httpMaquinas.getMaquinasDesactivadas)

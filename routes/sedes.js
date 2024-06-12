@@ -3,10 +3,11 @@ import httpSedes from '../controllers/sedes.js'
 import { check } from 'express-validator'
 import { validarCampos } from '../middlewares/validar-campos.js'
 import helpersSedes from '../helpers/sedes.js'
+import {validarJWT} from '../middlewares/validar-jwt.js'
 
 const router=Router()
 
-router.get("/listar",httpSedes.getSedes)
+router.get("/listar",[validarJWT],httpSedes.getSedes)
 
 router.get("/listarid/:id",httpSedes.getSedesID)
 router.get("/listaractivados",httpSedes.getSedesactivadas)

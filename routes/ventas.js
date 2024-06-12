@@ -3,10 +3,11 @@ import httpVentas from '../controllers/ventas.js'
 import { check, checkExact } from 'express-validator'
 import { validarCampos } from '../middlewares/validar-campos.js'
 import helpersVentas from '../helpers/ventas.js'
+import {validarJWT} from '../middlewares/validar-jwt.js'
 
 const router=Router()
 
-router.get("/listar",httpVentas.getVentas)
+router.get("/listar",[validarJWT],httpVentas.getVentas)
 
 router.get("/listarid/:id",httpVentas.getVentasID)
 

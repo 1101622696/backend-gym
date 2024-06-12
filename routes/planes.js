@@ -3,10 +3,12 @@ import httpPlanes from '../controllers/planes.js'
 import { check } from 'express-validator'
 import { validarCampos } from '../middlewares/validar-campos.js'
 import helpersPlanes from '../helpers/planes.js'
+import {validarJWT} from '../middlewares/validar-jwt.js'
+
 
 const router=Router()
 
-router.get("/listar",httpPlanes.getPlanes)
+router.get("/listar",[validarJWT],httpPlanes.getPlanes)
 
 router.get("/listarid/:id",httpPlanes.getPlanesID)
 router.get("/listaractivos",httpPlanes.getPlanesactivados)

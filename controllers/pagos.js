@@ -4,18 +4,35 @@ const httpPagos = {
 
     getPagos: async (req, res) => {
         const {busqueda} = req.query
-        const pago = await Pago.find()
+        const pago = await Pago.find(
+            {
+                $or: [
+                    { plan: new RegExp(busqueda, "i") },
+
+                ]
+            }
+        )
         res.json({pago})
     },
 
     getPagosactivados: async (req, res) => {
-        const activados = await Pago.find(estado == 1)
-        res.json({ activados })
+        try {
+            const activados = await Pago.find({ estado: 1 });
+            res.json({ activados });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Error al obtener Pago activados' });
+        }
     },
 
     getPagosdesactivados: async (req, res) => {
-        const desactivados = await Pago.find(estado == 0)
+        try {
+        const desactivados = await Pago.find({ estado: 0 })
         res.json({ desactivados })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener Pago activados' });
+    }
     },
 
     getPagosID: async (req, res) => {
