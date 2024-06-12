@@ -9,8 +9,8 @@ const router=Router()
 router.get("/listar",httpSedes.getSedes)
 
 router.get("/listarid/:id",httpSedes.getSedesID)
-router.get("/listaractivados",httpSedes.getSedesactivados)
-router.get("/listardesactivados",httpSedes.getSedesdesactivados)
+router.get("/listaractivados",httpSedes.getSedesactivadas)
+router.get("/listardesactivados",httpSedes.getSedesdesactivadas)
 
 
 router.post("/escribir",[

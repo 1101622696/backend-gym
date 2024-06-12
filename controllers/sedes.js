@@ -13,15 +13,25 @@ const httpSedes = {
         const sede = await Sede.findById(id)
         res.json({ sede })
     },
-    getSedesactivados: async (req, res) => {
-        const activados = await Sede.find(estado == 1)
-        res.json({ activados })
+    getSedesactivadas: async (req, res) => {
+        try {
+            const activadas = await Sede.find({ estado: 1 });
+            res.json({ activadas });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Error al obtener sedes activadas' });
+        }
     },
 
-    getSedesdesactivados: async (req, res) => {
-        const desactivados = await Sede.find(estado == 0)
-        res.json({ desactivados })
-    },
+    getSedesdesactivadas: async (req, res) => {
+        try {
+            const desactivadas = await Sede.find({ estado: 0 })
+            res.json({ desactivadas })
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Error al obtener sedes desactivadas' });
+        }
+        },
 
     postSedes: async (req, res) => {
         try {
@@ -45,15 +55,32 @@ const httpSedes = {
     },
 
     putSedesActivar: async (req, res) => {
-        const { id } = req.params
-        const sede = await Plan.findByIdAndUpdate(id, { estado: 1 }, { new: true })
-        res.json({ sede })
+        const { id } = req.params;
+        try {
+            const sede = await Sede.findByIdAndUpdate(id, { estado: 1 }, { new: true });
+            if (!sede) {
+                return res.status(404).json({ error: "sede no encontrado" });
+            }
+            res.json({ sede });
+        } catch (error) {
+            console.error("Error al activar sede", error);
+            res.status(500).json({ error: "Error interno del servidor" });
+        }
     },
 
     putSedesDesactivar: async (req, res) => {
-        const { id } = req.params
-        const sede = await Plan.findByIdAndUpdate(id, { estado: 0 }, { new: true })
-        res.json({ sede })
-    }
+        const { id } = req.params;
+        try {
+            const sede = await Sede.findByIdAndUpdate(id, { estado: 0 }, { new: true });
+            if (!sede) {
+                return res.status(404).json({ error: "sede no encontrado" });
+            }
+            res.json({ sede });
+        } catch (error) {
+            console.error("Error al desactivar sede", error);
+            res.status(500).json({ error: "Error interno del servidor" });
+        }
+    },
+
 }
 export default httpSedes

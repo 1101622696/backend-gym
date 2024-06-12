@@ -18,13 +18,24 @@ const httpUsuarios = {
     res.json({ usuario });
   },
   getUsuariosactivados: async (req, res) => {
-    const activados = await Usuario.find(estado == 1);
-    res.json({ activados });
-  },
+    try {
+      const activados = await Usuario.find({ estado: 1 });
+      res.json({ activados });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error al obtener usuarios activados' });
+  }
+},
+
 
   getUsuariosdesactivados: async (req, res) => {
-    const desactivados = await Usuario.find(estado == 0);
-    res.json({ desactivados });
+    try {
+      const desactivados = await Usuario.find({ estado: 0 })
+      res.json({ desactivados })
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error al obtener usuarios activados' });
+  }
   },
 
   postUsuarios: async (req, res) => {
@@ -73,23 +84,31 @@ const httpUsuarios = {
 
   putUsuariosActivar: async (req, res) => {
     const { id } = req.params;
-    const usuario = await Usuario.findByIdAndUpdate(
-      id,
-      { estado: 1 },
-      { new: true }
-    );
-    res.json({ usuario });
-  },
+    try {
+        const usuario = await Usuario.findByIdAndUpdate(id, { estado: 1 }, { new: true });
+        if (!usuario) {
+            return res.status(404).json({ error: "usuario no encontrado" });
+        }
+        res.json({ usuario });
+    } catch (error) {
+        console.error("Error al activar usuario", error);
+        res.status(500).json({ error: "Error interno del servidor" });
+    }
+},
 
-  putUsuariosDesactivar: async (req, res) => {
+putUsuariosDesactivar: async (req, res) => {
     const { id } = req.params;
-    const usuario = await Usuario.findByIdAndUpdate(
-      id,
-      { estado: 0 },
-      { new: true }
-    );
-    res.json({ usuario });
-  },
+    try {
+        const usuario = await Usuario.findByIdAndUpdate(id, { estado: 0 }, { new: true });
+        if (!usuario) {
+            return res.status(404).json({ error: "usuario no encontrado" });
+        }
+        res.json({ usuario });
+    } catch (error) {
+        console.error("Error al desactivar usuario", error);
+        res.status(500).json({ error: "Error interno del servidor" });
+    }
+},
 
   login: async (req, res) => {
     const { email, password } = req.body;

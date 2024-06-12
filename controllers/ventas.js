@@ -16,18 +16,6 @@ const httpVentas = {
         res.json({ venta })
     },
 
-    // postVentas: async (req, res) => {
-    //     try {
-    //       const { IdInventario, codigo, valorUnitario, cantidad } = req.body;
-    //       const total = valorUnitario * cantidad; 
-      
-    //       const venta = new Cliente({ IdInventario, codigo, valorUnitario, cantidad, total });
-    //       await venta.save();
-    //       res.json({ venta });
-    //     } catch (error) {
-    //       res.status(400).json({ error: "No se pudo crear el registro" });
-    //     }
-    //   },
 
     postVentas: async (req, res) => {
         try {

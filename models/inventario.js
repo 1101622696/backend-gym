@@ -5,6 +5,7 @@ const inventarioSchema=new mongoose.Schema({
  descripcion:{type:String,required:true},
  valor:{ type: Number, require: true },
  cantidad: { type: Number, require: true },
+ estado: { type: Number, default: 1 },
 
 })
 

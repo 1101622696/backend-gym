@@ -10,6 +10,7 @@ const router=Router()
 
 
 router.get("/listar",[validarJWT],httpClientes.getClientes)
+// router.get("/listar",httpClientes.getClientes)
 router.get("/listar",httpClientes.getClientes)
 router.get("/listarid/:id",httpClientes.getClientesID)
 router.get("/seguimiento",httpClientes.getSeguimientoCliente)
@@ -25,7 +26,7 @@ router.post("/escribir",[
     check('idPlan','Se necesita un mongoid valido').isMongoId(),
     check('idPlan').custom(helpersClientes.validaridPlan),
     check('telefono', 'minimo 9 caracteres.').isLength({min:9}),
-    check('telefono').custom(helpersClientes.validarTelefono),
+    // check('telefono').custom(helpersClientes.validarTelefono),
     validarCampos
 ],httpClientes.postClientes)
 

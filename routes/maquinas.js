@@ -7,8 +7,10 @@ import helpersMaquinas from '../helpers/maquinas.js'
 const router=Router()
 
 router.get("/listar",httpMaquinas.getMaquinas)
-
 router.get("/listarid/:id",httpMaquinas.getMaquinasID)
+router.get("/listaractivadas",httpMaquinas.getMaquinasactivadas)
+router.get("/listardesactivadas",httpMaquinas.getMaquinasDesactivadas)
+
 
 router.post("/escribir",[
   check('idSede','Se necesita un mongoId valido').isMongoId(),

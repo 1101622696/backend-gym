@@ -45,15 +45,31 @@ const httpPagos = {
     },
 
     putPagosActivar: async (req, res) => {
-        const { id } = req.params
-        const pago = await Pago.findByIdAndUpdate(id, { estado: 1 }, { new: true })
-        res.json({ pago })
+        const { id } = req.params;
+        try {
+            const pago = await Pago.findByIdAndUpdate(id, { estado: 1 }, { new: true });
+            if (!pago) {
+                return res.status(404).json({ error: "pago no encontrado" });
+            }
+            res.json({ pago });
+        } catch (error) {
+            console.error("Error al activar pago", error);
+            res.status(500).json({ error: "Error interno del servidor" });
+        }
     },
 
     putPagosDesactivar: async (req, res) => {
-        const { id } = req.params
-        const pago = await Pago.findByIdAndUpdate(id, { estado: 0 }, { new: true })
-        res.json({ pago })
-    }
+        const { id } = req.params;
+        try {
+            const pago = await Pago.findByIdAndUpdate(id, { estado: 0 }, { new: true });
+            if (!pago) {
+                return res.status(404).json({ error: "pago no encontrado" });
+            }
+            res.json({ pago });
+        } catch (error) {
+            console.error("Error al desactivar pago", error);
+            res.status(500).json({ error: "Error interno del servidor" });
+        }
+    },
 }
 export default httpPagos
