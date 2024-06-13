@@ -43,8 +43,8 @@ const httpPagos = {
 
     postPagos: async (req, res) => {
         try {
-        const {id,plan,fecha,valor, estado} = req.body
-        const pago = new Pago({id,plan,fecha,valor, estado})
+        const {id,plan,valor, estado} = req.body
+        const pago = new Pago({id,plan,valor, estado})
         await pago.save()
         res.json({ pago })
     }catch (error) {

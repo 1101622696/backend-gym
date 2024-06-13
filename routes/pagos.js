@@ -20,8 +20,8 @@ router.post("/escribir",[
   check('id').custom(helpersPagos.validarIdCliente),
   check('valor','solo numeros').isNumeric(),
   check('plan', 'que plan desea?.').isString(),
-  check('fecha', 'ingrese bien la fecha.').toDate(),
-  check('fecha').custom(helpersPagos.validarFechaPago),
+  // check('fecha', 'ingrese bien la fecha.').toDate(),
+  // check('fecha').custom(helpersPagos.validarFechaPago),
 ],httpPagos.postPagos)
 
 router.put("/modificar/:id",[
@@ -35,16 +35,12 @@ router.put("/modificar/:id",[
 router.put("/activar/activos/:id",[
   check('id','Se necesita un mongoid valido').isMongoId(),
   check('id').custom(helpersPagos.validarIdPago),
-  check('valor','solo numeros').isNumeric(),
-  check('plan', 'en digitos.').isNumeric(),
   validarCampos
 ],httpPagos.putPagosActivar)
 
 router.put("/desactivar/desactivados/:id",[
   check('id','Se necesita un mongoid valido').isMongoId(),
   check('id').custom(helpersPagos.validarIdPago),
-  check('valor','solo numeros').isNumeric(),
-  check('plan', 'en digitos.').isNumeric(),
   validarCampos
 ],httpPagos.putPagosDesactivar)
 
