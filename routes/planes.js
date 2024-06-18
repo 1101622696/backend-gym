@@ -19,7 +19,7 @@ router.post("/escribir",[
     check('codigo','El codigo no puede estar vacio.').notEmpty(),
     check('descripcion','la descripcion no puede estar vacia.').notEmpty(),
   check('dias','dias no puede estar vacio.').notEmpty(),
-    check('total','Numeros.').isNumeric().notEmpty(),
+    // check('total','Numeros.').isNumeric().notEmpty(),
     check('valor','Numeros.').isNumeric().notEmpty(),
     validarCampos
 ],httpPlanes.postPlanes)
@@ -28,7 +28,7 @@ router.put("/modificar/:id",[
   check('codigo','El codigo no puede estar vacio.').notEmpty(),
   check('descripcion','la descripcion no puede estar vacia.').notEmpty(),
   check('dias','dias no puede estar vacio.').notEmpty(),
-  check('total','Numeros.').isNumeric().notEmpty(),
+  // check('total','Numeros.').isNumeric().notEmpty(),
   check('valor','Numeros.').isNumeric().notEmpty(),
   validarCampos
 ],httpPlanes.putPlanes)

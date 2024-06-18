@@ -1,4 +1,16 @@
 import Inventario from "../models/inventario.js"
+import ContadorI from "../models/contadori.js";
+
+const obtenerSiguienteCodigo = async () => {
+    const nombreContador = 'ventas';
+    const contadori = await ContadorI.findOneAndUpdate(
+      { nombre: nombreContador },
+      { $inc: { valor: 1 } },
+      { new: true, upsert: true }
+    );
+    return contadori.valor;
+  };
+  
 
 const httpInventario = {
 
@@ -40,7 +52,9 @@ getInventarioID: async (req, res) => {
     },
     postInventario: async (req, res) => {
         try {
-        const {codigo,descripcion,valor,cantidad} = req.body
+        const {descripcion,valor,cantidad} = req.body
+        const codigo = await obtenerSiguienteCodigo();
+
         const inventario = new Inventario({codigo,descripcion,valor,cantidad})
         await inventario.save()
         res.json({ inventario })

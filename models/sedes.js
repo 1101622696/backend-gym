@@ -5,7 +5,6 @@ const sedeSchema = new mongoose.Schema({
   direccion: { type: String, require: true },
   telefono: { type: String, require: true },
   ciudad: { type: String, require: true},
-  codigo:{type: String, require: true, unique:true},
   horario: { type: String, require: true},
   estado: { type: Number, default: 1 },
   createAt: { type: Date, default: Date.now() },

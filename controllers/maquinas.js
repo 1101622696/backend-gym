@@ -1,4 +1,15 @@
 import Maquina from "../models/maquinas.js"
+import ContadorM from "../models/contadorm.js";
+
+const obtenerSiguienteCodigo = async () => {
+    const nombreContador = 'ventas';
+    const contadorm = await ContadorM.findOneAndUpdate(
+      { nombre: nombreContador },
+      { $inc: { valor: 1 } },
+      { new: true, upsert: true }
+    );
+    return contadorm.valor;
+  };
 
 const httpMaquinas = {
 
@@ -22,7 +33,9 @@ const httpMaquinas = {
 
     postMaquinas: async (req, res) => {
         try {
-        const {idSede,codigo,descripcion,estado} = req.body
+        const {idSede,descripcion,estado} = req.body
+        const codigo = await obtenerSiguienteCodigo();
+
         const maquina = new Maquina({idSede,codigo,descripcion,estado})
         await maquina.save()
         res.json({ maquina })

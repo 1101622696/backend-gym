@@ -15,7 +15,7 @@ router.get("/listar",httpClientes.getClientes)
 router.get("/listarid/:id",httpClientes.getClientesID)
 router.get("/seguimiento",httpClientes.getSeguimientoCliente)
 router.get("/porplan/:id",httpClientes.getClientesPorPlan)
-router.get("/cumpleaños",httpClientes.getClientesPorCumpleaños)
+router.get("/cumpleanos",httpClientes.getClientesPorCumpleaños)
 router.get("/listaractivados",httpClientes.getClientesactivados)
 router.get("/listardesactivados",httpClientes.getClientesdesactivados)
 

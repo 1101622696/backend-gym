@@ -22,8 +22,8 @@ const httpPlanes = {
 
     postPlanes: async (req, res) => {
         try {
-        const {codigo,descripcion,total,valor,dias,estado} = req.body
-        const plan = new Plan({codigo,descripcion,total,valor,dias,estado})
+        const {codigo,descripcion,valor,dias,estado} = req.body
+        const plan = new Plan({codigo,descripcion,valor,dias,estado})
         await plan.save()
         res.json({ plan })
     }catch (error) {

@@ -35,8 +35,8 @@ const httpSedes = {
 
     postSedes: async (req, res) => {
         try {
-        const {nombre,direccion,telefono,ciudad,codigo,horario,estado} = req.body
-        const sede = new Sede({nombre,direccion,telefono,ciudad,codigo,horario,estado})
+        const {nombre,direccion,telefono,ciudad,horario,estado} = req.body
+        const sede = new Sede({nombre,direccion,telefono,ciudad,horario,estado})
         await sede.save()
         res.json({ sede })
     }catch (error) {
@@ -47,7 +47,7 @@ const httpSedes = {
 
     putSedes: async (req, res) => {
         const { id } = req.params
-        const { _id, codigo,estado,  ...resto } = req.body
+        const { _id,estado,  ...resto } = req.body
         console.log(resto);
 
         const sede = await Sede.findByIdAndUpdate(id, resto, { new: true })

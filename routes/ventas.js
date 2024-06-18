@@ -14,9 +14,9 @@ router.get("/listarid/:id",httpVentas.getVentasID)
 router.post("/escribir",[
   check('id', 'mongo id').isMongoId(),
   check('id').custom(helpersVentas.validarIdInventario),
-    check('fecha','la fecha no puede estar vacia.').notEmpty(),
-    check('codigo','no puede estar vacio el codigo.').notEmpty(),
-    check('valorUnitario','no puede estar vacio el valor unitario y debe ser en numero.').notEmpty().isNumeric(),
+    // check('fecha','la fecha no puede estar vacia.').notEmpty(),
+    // check('codigo','no puede estar vacio el codigo.').notEmpty(),
+    check('valorUnitario','no puede estar vacio el valor unitario y debe ser en numero.').notEmpty(),
     check('cantidad','no puede estar vacio la cantidad y debe ser en numeros.').notEmpty().isNumeric(),
 check("cantidad", 'no puede superar la cantidad establecida en inventario').custom(async (value, { req }) => {
     try {

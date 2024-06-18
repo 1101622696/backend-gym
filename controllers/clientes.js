@@ -52,7 +52,7 @@ const httpClientes = {
 
     getClientesPorCumpleaños: async (req, res) => {
         try {
-            const { dia, mes } = req.params; 
+            const { dia, mes } = req.query; 
 
             const day = parseInt(dia);
             const month = parseInt(mes);
@@ -120,28 +120,75 @@ const httpClientes = {
     },
   
 
+    // este sirve
+    // putClienteSeguimiento: async (req, res) => {
+    //     const { id } = req.params;
+    //     const { seguimiento } = req.body;
+    
+    //     try {
+    //         const cliente = await Cliente.findById(id);
+    //         if (!cliente) {
+    //             return res.status(404).json({ error: "Cliente no encontrado" });
+    //         }
+    
+    //         cliente.seguimiento.push(...seguimiento);
+    
+    //         await cliente.save();
+    
+    //         res.json({ message: "Seguimiento actualizado", cliente });
+    //     } catch (error) {
+    //         console.error("Error al actualizar el seguimiento", error);
+    //         res.status(500).json({ error: "Error interno del servidor" });
+    //     }
+    // },
+    
+    // putClienteSeguimiento: async (req, res) => {
+    //     const { id } = req.params;
+    //     const { seguimiento } = req.body;
+      
+    //     try {
+    //       console.log("ID del cliente recibido:", id);
+    //       console.log("Datos de seguimiento recibidos:", seguimiento);
+      
+    //       const cliente = await Cliente.findById(id);
+    //       if (!cliente) {
+    //         return res.status(404).json({ error: "Cliente no encontrado" });
+    //       }
+      
+    //       cliente.seguimiento.push(...seguimiento);
+      
+    //       await cliente.save();
+      
+    //       res.json({ message: "Seguimiento actualizado", cliente });
+    //     } catch (error) {
+    //       console.error("Error al actualizar el seguimiento", error);
+    //       res.status(500).json({ error: "Error interno del servidor" });
+    //     }
+    //   },      
+    
     putClienteSeguimiento: async (req, res) => {
         const { id } = req.params;
         const { seguimiento } = req.body;
-    
+      
         try {
-            const cliente = await Cliente.findById(id);
-            if (!cliente) {
-                return res.status(404).json({ error: "Cliente no encontrado" });
-            }
-    
-            cliente.seguimiento.push(...seguimiento);
-    
-            await cliente.save();
-    
-            res.json({ message: "Seguimiento actualizado", cliente });
+          console.log("ID del cliente recibido:", id);
+          console.log("Datos de seguimiento recibidos:", seguimiento);
+      
+          const cliente = await Cliente.findById(id);
+          if (!cliente) {
+            return res.status(404).json({ error: "Cliente no encontrado" });
+          }
+      
+          cliente.seguimiento.push(...seguimiento);
+      
+          await cliente.save();
+      
+          res.json({ message: "Seguimiento actualizado", cliente });
         } catch (error) {
-            console.error("Error al actualizar el seguimiento", error);
-            res.status(500).json({ error: "Error interno del servidor" });
+          console.error("Error al actualizar el seguimiento", error);
+          res.status(500).json({ error: "Error interno del servidor" });
         }
-    },
-    
-    
+      },   
     
     
 

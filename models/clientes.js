@@ -13,12 +13,12 @@ const clientesSchema = new mongoose.Schema({
   foto: { type: String, required: true },
   seguimiento: [
     {
-      fecha: { type: Date, default: Date.now() },
-      peso: { type: Number, require: true },
-      imc: { type: Number, require: true },
-      brazo: { type: Number, require: true },
-      pierna: { type: Number, require: true },
-      edad: { type: Number, require: true },
+      fecha: { type: Date, default: Date.now},
+      peso: { type: Number, default:1 },
+      imc: { type: Number, default:1 },
+      brazo: { type: Number, default:1 },
+      pierna: { type: Number, default:1 },
+      edad: { type: Number, default:1 },
     },
   ],
 });

@@ -19,7 +19,6 @@ router.post("/escribir",[
     check('direccion','La direccion no puede estar vacia.').notEmpty(),
     check('telefono','nueve digitos.').isMobilePhone(),
     check('ciudad','debe ir la ubicacion de la sede.').notEmpty(),
-    check('codigo','no puede ir vacio el codigo.').notEmpty(),
     check('telefono','nueve digitos.').isLength({min:9}),
     check('horario','escribir el horario de la sede.').isString(),
     validarCampos
@@ -30,7 +29,7 @@ router.put("/modificar/:id",[
   check('direccion','La direccion no puede estar vacia.').notEmpty(),
   check('telefono','nueve digitos.').isMobilePhone(),
   check('ciudad','debe ir la ubicacion de la sede.').notEmpty(),
-  check('codigo','no puede ir vacio el codigo.').notEmpty(),
+  // check('codigo','no puede ir vacio el codigo.').notEmpty(),
   check('telefono','nueve digitos.').isLength({min:9}),
   check('horario','escribir el horario de la sede.').isString(),
   validarCampos
