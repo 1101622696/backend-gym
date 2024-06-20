@@ -9,6 +9,12 @@ const helpersPagos={
             throw new Error ("Id no existe")
         }
     },
+    validaridPlan:async (idPlan)=>{
+        const existe = await Plan.findById(idPlan)
+        if (existe==undefined){
+            throw new Error ("Id no existe")
+        }
+    },
     validarIdPago:async (id)=>{
         const existe = await Pago.findById(id)
         if (existe==undefined){

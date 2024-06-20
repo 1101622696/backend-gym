@@ -1,19 +1,14 @@
 import Pago from "../models/pagos.js"
+import Plan from "../models/planes.js"
+
 
 const httpPagos = {
 
     getPagos: async (req, res) => {
-        const {busqueda} = req.query
-        const pago = await Pago.find(
-            {
-                $or: [
-                    { plan: new RegExp(busqueda, "i") },
-
-                ]
-            }
-        )
+        const pago = await Pago.find()
         res.json({pago})
     },
+
 
     getPagosactivados: async (req, res) => {
         try {
@@ -41,15 +36,34 @@ const httpPagos = {
         res.json({ pago })
     },
 
+    // postPagos: async (req, res) => {
+    //     try {
+    //     const {idCliente,valor,idPlan, estado} = req.body
+    //     const pago = new Pago({idCliente,valor,idPlan, estado})
+    //     await pago.save()
+    //     res.json({ pago })
+    // }catch (error) {
+    //     res.status(400).json({ error: "No se pudo crear el registro" })
+    // }
+    // },
     postPagos: async (req, res) => {
         try {
-        const {id,plan,valor, estado} = req.body
-        const pago = new Pago({id,plan,valor, estado})
-        await pago.save()
-        res.json({ pago })
-    }catch (error) {
-        res.status(400).json({ error: "No se pudo crear el registro" })
-    }
+            const { idCliente, idPlan, estado } = req.body;
+    
+            // Obtener el plan para obtener su valor
+            const plan = await Plan.findById(idPlan);
+            if (!plan) {
+                return res.status(404).json({ error: "Plan no encontrado" });
+            }
+    
+            const valor = plan.valor;
+    
+            const pago = new Pago({ idCliente, idPlan, valor, estado });
+            await pago.save();
+            res.json({ pago });
+        } catch (error) {
+            res.status(400).json({ error: "No se pudo crear el registro" });
+        }
     },
 
     putPagos: async (req, res) => {

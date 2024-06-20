@@ -99,8 +99,8 @@ const httpClientes = {
 
     postClientes: async (req, res) => {
         try {
-        const {nombre, fechaIngreso, documento,direccion,fechaNacimiento,telefono,estado,idPlan,fechavencimiento,foto, seguimiento} = req.body
-        const cliente = new Cliente({nombre, fechaIngreso, documento,direccion,fechaNacimiento,telefono,estado,idPlan,fechavencimiento,foto, seguimiento})
+        const {nombre, fechaIngreso, documento,direccion,fechaNacimiento,telefono,observaciones,estado,idPlan,fechavencimiento,foto, seguimiento} = req.body
+        const cliente = new Cliente({nombre, fechaIngreso, documento,direccion,fechaNacimiento,telefono,observaciones,estado,idPlan,fechavencimiento,foto, seguimiento})
         await cliente.save()
         res.json({ cliente })
     }catch (error) {

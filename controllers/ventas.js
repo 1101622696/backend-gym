@@ -31,8 +31,7 @@ const httpVentas = {
     try {
       const { id, valorUnitario, cantidad } = req.body;
       const total = valorUnitario * cantidad;
-      const codigo = await obtenerSiguienteCodigo();
-
+c
       const venta = new Venta({ id, codigo, valorUnitario, cantidad, total });
       await venta.save();
 

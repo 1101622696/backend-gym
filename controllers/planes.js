@@ -1,5 +1,15 @@
 import Plan from "../models/planes.js"
+import ContadorP from "../models/contadorp.js";
 
+const obtenerSiguienteCodigo = async () => {
+  const nombreContador = 'ventas';
+  const contadorp = await ContadorP.findOneAndUpdate(
+    { nombre: nombreContador },
+    { $inc: { valor: 1 } },
+    { new: true, upsert: true }
+  );
+  return contadorp.valor;
+};
 const httpPlanes = {
 
     getPlanes: async (req, res) => {
@@ -22,7 +32,9 @@ const httpPlanes = {
 
     postPlanes: async (req, res) => {
         try {
-        const {codigo,descripcion,valor,dias,estado} = req.body
+        const {descripcion,valor,dias,estado} = req.body
+        const codigo = await obtenerSiguienteCodigo();
+
         const plan = new Plan({codigo,descripcion,valor,dias,estado})
         await plan.save()
         res.json({ plan })

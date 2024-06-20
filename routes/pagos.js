@@ -17,10 +17,10 @@ router.get("/listardesactivados",httpPagos.getPagosdesactivados)
 
 
 router.post("/escribir",[
-  check('id').custom(helpersPagos.validarIdCliente),
-  check('valor','solo numeros').isNumeric(),
-  check('plan', 'que plan desea?.').isString(),
-  // check('fecha', 'ingrese bien la fecha.').toDate(),
+  check('idCliente').custom(helpersPagos.validarIdCliente),
+  // check('valor','solo numeros').isNumeric(),
+  check('idPlan','Se necesita un mongoid valido').isMongoId(),
+  check('idPlan').custom(helpersPagos.validaridPlan),  // check('fecha', 'ingrese bien la fecha.').toDate(),
   // check('fecha').custom(helpersPagos.validarFechaPago),
 ],httpPagos.postPagos)
 

@@ -33,6 +33,7 @@ router.post("/escribir",[
 
 router.put("/modificar/:id",[    
     check('nombre','El documento no puede estar vacio.').notEmpty(),
+    check('observaciones','las observaciones no puede estar vacias.').notEmpty(),
     check('documento','Minimo 6 caracteres.').isLength({min:6}),
     check('telefono', 'minimo 9 caracteres.').isLength({min:9}),
     check('telefono', 'en digitos.').isNumeric().notEmpty(),
