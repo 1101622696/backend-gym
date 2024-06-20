@@ -18,7 +18,7 @@ const clientesSchema = new mongoose.Schema({
       peso: { type: Number, default:1 },
       imc: { type: Number, default:1 },
       brazo: { type: Number, default:1 },
-      pierna: { type: Number, default:1 },
+      altura: { type: Number, default:1 },
       edad: { type: Number, default:1 },
     },
   ],

@@ -169,26 +169,33 @@ const httpClientes = {
     putClienteSeguimiento: async (req, res) => {
         const { id } = req.params;
         const { seguimiento } = req.body;
-      
+    
         try {
-          console.log("ID del cliente recibido:", id);
-          console.log("Datos de seguimiento recibidos:", seguimiento);
-      
-          const cliente = await Cliente.findById(id);
-          if (!cliente) {
-            return res.status(404).json({ error: "Cliente no encontrado" });
-          }
-      
-          cliente.seguimiento.push(...seguimiento);
-      
-          await cliente.save();
-      
-          res.json({ message: "Seguimiento actualizado", cliente });
+            console.log("ID del cliente recibido:", id);
+            console.log("Datos de seguimiento recibidos:", seguimiento);
+    
+            const cliente = await Cliente.findById(id);
+            if (!cliente) {
+                return res.status(404).json({ error: "Cliente no encontrado" });
+            }
+    
+    // Calcula el IMC y agrega al seguimiento
+    const seguimientoConIMC = seguimiento.map(entry => {
+        const alturaEnMetros = entry.altura / 100; // Convertir altura de cm a metros
+        const imc = entry.peso / (alturaEnMetros * alturaEnMetros);
+        return { ...entry, imc: imc.toFixed(2) };
+      });
+  
+      cliente.seguimiento.push(...seguimientoConIMC);
+  
+      await cliente.save();
+    
+            res.json({ message: "Seguimiento actualizado", cliente });
         } catch (error) {
-          console.error("Error al actualizar el seguimiento", error);
-          res.status(500).json({ error: "Error interno del servidor" });
+            console.error("Error al actualizar el seguimiento", error);
+            res.status(500).json({ error: "Error interno del servidor" });
         }
-      },   
+    },
     
     
 

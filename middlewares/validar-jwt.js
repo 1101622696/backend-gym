@@ -5,9 +5,11 @@
 import jwt from 'jsonwebtoken';
 import Usuario from "../models/usuarios.js";
 
-const generarJWT = (id) => {
+
+
+const generarJWT = (id, rol) => {
     return new Promise((resolve, reject) => {
-        const payload = {id};
+        const payload = {id, rol};
         jwt.sign(payload, process.env.SECRETORPRIVATEKEY, {
             //100 years
             expiresIn: "4h"
@@ -21,6 +23,24 @@ const generarJWT = (id) => {
         })
     })
 }
+
+
+// const generarJWT = (id) => {
+//     return new Promise((resolve, reject) => {
+//         const payload = {id};
+//         jwt.sign(payload, process.env.SECRETORPRIVATEKEY, {
+//             //100 years
+//             expiresIn: "4h"
+//         }, (err, token) => {
+//             if (err) {
+
+//                 reject("No se pudo generar el token")
+//             } else {
+//                 resolve(token)
+//             }
+//         })
+//     })
+// }
 
 const validarJWT = async (req, res, next) => {
     const token = req.header("x-token");

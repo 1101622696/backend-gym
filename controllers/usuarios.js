@@ -110,44 +110,66 @@ putUsuariosDesactivar: async (req, res) => {
     }
 },
 
-  login: async (req, res) => {
-    const { email, password } = req.body;
-    try {
-      const user = await Usuario.findOne({ email });
 
-      if (!user) {
-        // console.log("hola");
-        return res.status(401).json({
-          msg: "usuario o contraseña incorrecto",
-        });
-      }
+login: async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await Usuario.findOne({ email });
 
-      if (user.estado == 0) {
-        // console.log("hola1");
-        return res.status(401).json({
-          msg: "usuario o contraseña incorrecto",
-        });
-      }
-
-      const validacionpassword = bcryptjs.compareSync(password, user.password);
-      if (!validacionpassword) {
-        // console.log("hola123213");
-        return res.status(401).json({
-          msg: "usuario o contraseña incorrecto",
-        });
-      }
-      console.log(password);
-
-      const token = await generarJWT(user._id);
-      res.json({
-        usuario: user,
-        token,
-      });
-    } catch (error) {
-      return res.status(500).json({
-        msg: "comuniquese con el admin.",
-      });
+    if (!user || user.estado == 0) {
+      return res.status(401).json({ msg: "usuario o contraseña incorrecto" });
     }
-  },
+
+    const validacionpassword = bcryptjs.compareSync(password, user.password);
+    if (!validacionpassword) {
+      return res.status(401).json({ msg: "usuario o contraseña incorrecto" });
+    }
+
+    const token = await generarJWT(user._id, user.rol);
+    res.json({ usuario: user, token });
+  } catch (error) {
+    return res.status(500).json({ msg: "comuniquese con el admin." });
+  }
+},
+
+  // login: async (req, res) => {
+  //   const { email, password } = req.body;
+  //   try {
+  //     const user = await Usuario.findOne({ email });
+
+  //     if (!user) {
+  //       // console.log("hola");
+  //       return res.status(401).json({
+  //         msg: "usuario o contraseña incorrecto",
+  //       });
+  //     }
+
+  //     if (user.estado == 0) {
+  //       // console.log("hola1");
+  //       return res.status(401).json({
+  //         msg: "usuario o contraseña incorrecto",
+  //       });
+  //     }
+
+  //     const validacionpassword = bcryptjs.compareSync(password, user.password);
+  //     if (!validacionpassword) {
+  //       // console.log("hola123213");
+  //       return res.status(401).json({
+  //         msg: "usuario o contraseña incorrecto",
+  //       });
+  //     }
+  //     console.log(password);
+
+  //     const token = await generarJWT(user._id);
+  //     res.json({
+  //       usuario: user,
+  //       token,
+  //     });
+  //   } catch (error) {
+  //     return res.status(500).json({
+  //       msg: "comuniquese con el admin.",
+  //     });
+  //   }
+  // },
 };
 export default httpUsuarios;
