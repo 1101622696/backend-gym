@@ -16,7 +16,7 @@ router.get("/listardesactivados",httpPlanes.getPlanesdesactivados)
 
 
 router.post("/escribir",[
-    check('codigo','El codigo no puede estar vacio.').notEmpty(),
+    // check('codigo','El codigo no puede estar vacio.').notEmpty(),
     check('descripcion','la descripcion no puede estar vacia.').notEmpty(),
   check('dias','dias no puede estar vacio.').notEmpty(),
     // check('total','Numeros.').isNumeric().notEmpty(),

@@ -26,6 +26,8 @@ router.put("/modificar/:id",[
     check('id','Se necesita un mongoId valido').isMongoId(),
     check('id').custom(helpersMantenimiento.validarIdMantenimiento),
     check('descripcion','la descripcion no puede estar vacia.').notEmpty(),
+    check('responsable','digite el nombre del responsable.').notEmpty(),
+    check('valor','el valor del mantenimiento no puede estar vacio.').notEmpty(),
     validarCampos
 ],httpMantenimiento.putMantenimiento)
 

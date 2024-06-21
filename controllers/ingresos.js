@@ -6,6 +6,16 @@ const httpIngresos = {
         const ingreso = await Ingreso.find()
         res.json({ingreso})
     },
+    //  getIngresos: async (req, res) => {
+    //     try {
+    //       const ingresos = await Ingreso.find().sort({ fecha: -1 }); // Ordena por fecha descendente
+    //       res.json({ ingresos });
+    //     } catch (error) {
+    //       console.error("Error al listar ingresos:", error);
+    //       res.status(500).json({ error: "Error al listar ingresos" });
+    //     }
+    //   },
+      
 
     getIngresosID: async (req, res) => {
         const { id } = req.params
