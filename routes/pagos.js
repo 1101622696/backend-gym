@@ -27,8 +27,8 @@ router.post("/escribir",[
 router.put("/modificar/:id",[
   check('id','Se necesita un mongoid valido').isMongoId(),
   check('id').custom(helpersPagos.validarIdPago),
-  check('valor','solo numeros').isNumeric(),
-  check('plan', 'en digitos.').isNumeric(),
+  check('idCliente').custom(helpersPagos.validarIdCliente),
+  check('idPlan').custom(helpersPagos.validaridPlan),  
   validarCampos
 ],httpPagos.putPagos)
 

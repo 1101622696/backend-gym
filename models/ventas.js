@@ -2,7 +2,7 @@
 import mongoose from "mongoose";
 
 const ventasSchema = new mongoose.Schema({
-  id: { type: mongoose.Schema.Types.ObjectId, ref: 'Inventario', required: true },
+  idInventario: { type: mongoose.Schema.Types.ObjectId, ref: 'Inventario', required: true },
   fecha: { type: Date, default: Date.now },
   codigo: { type: Number, unique: true, required: true },
   valorUnitario: { type: Number, required: true },

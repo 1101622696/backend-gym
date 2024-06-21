@@ -66,15 +66,21 @@ const httpPagos = {
         }
     },
 
-    putPagos: async (req, res) => {
-        const { id } = req.params
-        const { _id, estado,  ...resto } = req.body
-        console.log(resto);
-
-        const pago = await Pago.findByIdAndUpdate(id, resto, { new: true })
-        res.json({ pago })
-    },
-
+ putPagos: async (req, res) => {
+        const { id } = req.params;
+        const { _id, estado, ...resto } = req.body;
+      
+        try {
+          const pago = await Pago.findByIdAndUpdate(id, resto, { new: true });
+          if (!pago) {
+            return res.status(404).json({ msg: 'Pago no encontrado' });
+          }
+          res.json({ pago });
+        } catch (error) {
+          console.error('Error al actualizar el pago:', error);
+          res.status(500).json({ msg: 'Error al actualizar el pago' });
+        }
+      },      
     putPagosActivar: async (req, res) => {
         const { id } = req.params;
         try {

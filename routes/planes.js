@@ -25,7 +25,7 @@ router.post("/escribir",[
 ],httpPlanes.postPlanes)
 
 router.put("/modificar/:id",[
-  check('codigo','El codigo no puede estar vacio.').notEmpty(),
+  // check('codigo','El codigo no puede estar vacio.').notEmpty(),
   check('descripcion','la descripcion no puede estar vacia.').notEmpty(),
   check('dias','dias no puede estar vacio.').notEmpty(),
   // check('total','Numeros.').isNumeric().notEmpty(),

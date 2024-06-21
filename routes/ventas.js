@@ -11,32 +11,44 @@ router.get("/listar",[validarJWT],httpVentas.getVentas)
 
 router.get("/listarid/:id",httpVentas.getVentasID)
 
-router.post("/escribir",[
-  check('id', 'mongo id').isMongoId(),
-  check('id').custom(helpersVentas.validarIdInventario),
-    // check('fecha','la fecha no puede estar vacia.').notEmpty(),
-    // check('codigo','no puede estar vacio el codigo.').notEmpty(),
-    check('valorUnitario','no puede estar vacio el valor unitario y debe ser en numero.').notEmpty(),
-    check('cantidad','no puede estar vacio la cantidad y debe ser en numeros.').notEmpty().isNumeric(),
-check("cantidad", 'no puede superar la cantidad establecida en inventario').custom(async (value, { req }) => {
-    try {
-        await helpersVentas.validarCantidadDisponible(req.body.id, req.body.cantidad);
-        return true;
-    } catch (error) {
-        throw new Error(error.message);
-    }
-}),
+// router.post("/escribir",[
+//   check('idInventario', 'mongo id').isMongoId(),
+//   check('idInventario').custom(helpersVentas.validarIdInventario),
+//     check('valorUnitario','no puede estar vacio el valor unitario y debe ser en numero.').notEmpty(),
+//     check('cantidad','no puede estar vacio la cantidad y debe ser en numeros.').notEmpty().isNumeric(),
+//     check("cantidad", 'no puede superar la cantidad establecida en inventario').custom(async (value, { req }) => {
+//         try {
+//           await helpersVentas.validarCantidadDisponible(req.body.idInventario, req.body.cantidad);
+//           return true;
+//         } catch (error) {
+//           throw new Error(error.message);
+//         }
+//       }),
+//     validarCampos
+// ],httpVentas.postVentas)
+
+router.post("/escribir", [
+    check('idInventario', 'Debe ser un ID de Mongo válido').isMongoId(),
+    check('idInventario').custom(helpersVentas.validarIdInventario),
+    check('valorUnitario', 'No puede estar vacío el valor unitario y debe ser un número.').notEmpty().isNumeric(),
+    check('cantidad', 'No puede estar vacía la cantidad y debe ser un número.').notEmpty().isNumeric(),
+    check('cantidad', 'No puede superar la cantidad establecida en inventario').custom(async (cantidad, { req }) => {
+      await helpersVentas.validarCantidadDisponible(req.body.idInventario, cantidad);
+      return true;
+    }),
     validarCampos
-],httpVentas.postVentas)
+  ], httpVentas.postVentas);
+  
 
 router.put("/modificar/:id",[  
     check('id').custom(helpersVentas.validarIdVentas),
-check('fecha','la fecha no puede estar vacia.').notEmpty(),
-check('codigo','no puede estar vacio el codigo.').notEmpty(),
+    check('idInventario').custom(helpersVentas.validarIdInventario),
 check('valorUnitario','no puede estar vacio el valor unitario y debe ser en numero.').notEmpty().isNumeric(),
 check('cantidad','no puede estar vacio la cantidad y debe ser en numeros.').notEmpty().isNumeric(),
-check("cantidad", 'no puede digitar una cantidad superior al máximo establecido').custom(helpersVentas.validarCantidadInventario),
-validarCampos
+check('cantidad', 'No puede superar la cantidad establecida en inventario').custom(async (cantidad, { req }) => {
+    await helpersVentas.validarCantidadDisponible(req.body.idInventario, cantidad);
+    return true;
+  }),validarCampos
 ],httpVentas.putVentas)
 
 

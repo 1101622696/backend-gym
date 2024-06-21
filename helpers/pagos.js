@@ -1,10 +1,12 @@
 import Pago from "../models/pagos.js"
 import Cliente from "../models/clientes.js"
+import Plan from "../models/planes.js"
+
 
 
 const helpersPagos={
-    validarIdCliente:async (id)=>{
-        const existe = await Cliente.findById(id)
+    validarIdCliente:async (idCliente)=>{
+        const existe = await Cliente.findById(idCliente)
         if (existe==undefined){
             throw new Error ("Id no existe")
         }

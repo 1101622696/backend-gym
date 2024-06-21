@@ -29,13 +29,14 @@ const httpVentas = {
 
   postVentas: async (req, res) => {
     try {
-      const { id, valorUnitario, cantidad } = req.body;
+      const { idInventario, valorUnitario, cantidad } = req.body;
       const total = valorUnitario * cantidad;
-c
-      const venta = new Venta({ id, codigo, valorUnitario, cantidad, total });
+      const codigo = await obtenerSiguienteCodigo();
+
+      const venta = new Venta({ idInventario, codigo, valorUnitario, cantidad, total });
       await venta.save();
 
-      const inventario = await Inventario.findById(id);
+      const inventario = await Inventario.findById(idInventario);
       if (!inventario) {
         return res.status(404).json({ error: 'Inventario no encontrado' });
       }
@@ -49,13 +50,24 @@ c
     }
   },
 
+  // putVentas: async (req, res) => {
+  //   const { id } = req.params;
+  //   const { _id, codigo, fecha, total, ...resto } = req.body;
+  //   console.log(resto);
+
+  //   const venta = await Venta.findByIdAndUpdate(id, resto, { new: true });
+  //   res.json({ venta });
+  // },
   putVentas: async (req, res) => {
     const { id } = req.params;
-    const { _id, ...resto } = req.body;
-    console.log(resto);
+    const { idInventario, valorUnitario, cantidad, ...resto } = req.body;
 
-    const venta = await Venta.findByIdAndUpdate(id, resto, { new: true });
-    res.json({ venta });
+    try {
+      const venta = await Venta.findByIdAndUpdate(id, { idInventario, valorUnitario, cantidad, ...resto }, { new: true });
+      res.json({ venta });
+    } catch (error) {
+      return res.status(500).json({ msg: "Comuníquese con el admin." });
+    }
   },
 };
 
