@@ -13,6 +13,7 @@ import usuarios from "./routes/usuarios.js"
 import ventas from "./routes/ventas.js"
 import cors from 'cors'
 const app = express()
+app.use(express.static('public'))
 app.use(cors())
 app.use(express.json())
 app.use("/api/clientes",clientes)
