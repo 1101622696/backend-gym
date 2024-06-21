@@ -40,9 +40,9 @@ const httpUsuarios = {
 
   postUsuarios: async (req, res) => {
     try {
-      const { id, nombre, email, telefono, password, rol, estado } = req.body;
+      const { idSede, nombre, email, telefono, password, rol, estado } = req.body;
       const usuario = new Usuario({
-        id,
+        idSede,
         nombre,
         email,
         telefono,
@@ -62,7 +62,7 @@ const httpUsuarios = {
 
   putUsuarios: async (req, res) => {
     const { id } = req.params;
-    const { _id, codigo, estado, password, ...resto } = req.body;
+    const { _id, estado, password,  ...resto } = req.body;
     console.log(resto);
 
     const usuario = await Usuario.findByIdAndUpdate(id, resto, { new: true });
@@ -132,44 +132,21 @@ login: async (req, res) => {
   }
 },
 
-  // login: async (req, res) => {
-  //   const { email, password } = req.body;
-  //   try {
-  //     const user = await Usuario.findOne({ email });
-
-  //     if (!user) {
-  //       // console.log("hola");
-  //       return res.status(401).json({
-  //         msg: "usuario o contraseña incorrecto",
-  //       });
-  //     }
-
-  //     if (user.estado == 0) {
-  //       // console.log("hola1");
-  //       return res.status(401).json({
-  //         msg: "usuario o contraseña incorrecto",
-  //       });
-  //     }
-
-  //     const validacionpassword = bcryptjs.compareSync(password, user.password);
-  //     if (!validacionpassword) {
-  //       // console.log("hola123213");
-  //       return res.status(401).json({
-  //         msg: "usuario o contraseña incorrecto",
-  //       });
-  //     }
-  //     console.log(password);
-
-  //     const token = await generarJWT(user._id);
-  //     res.json({
-  //       usuario: user,
-  //       token,
-  //     });
-  //   } catch (error) {
-  //     return res.status(500).json({
-  //       msg: "comuniquese con el admin.",
-  //     });
-  //   }
-  // },
+  
+  getemail: async (req, res) => {
+    const { email } = req.query;
+    try {
+      const user = await Usuario.findOne({ email: email });
+      if (!user || user.estado === 0) {
+        return res.status(401).json({ msg: "Email incorrecto" });
+      }
+      const token = await generarJWT(user._id);
+    res.json({ usuario: user, token });
+      return res.status(200).json({ msg: "Email válido" });
+    } catch (error) {
+      return res.status(500).json({ msg: "Comuníquese con el admin." });
+    }
+  },
+  
 };
 export default httpUsuarios;

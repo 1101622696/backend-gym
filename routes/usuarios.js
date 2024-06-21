@@ -17,7 +17,7 @@ router.get("/listardesactivados",httpUsuarios.getUsuariosdesactivados)
 
 
 router.post("/escribir",[
-  check('id').custom(helpersUsuarios.validarIdSede),
+  check('idSede').custom(helpersUsuarios.validarIdSede),
     check('nombre','El nombre no puede estar vacio.').notEmpty(),
     check('email','El email no puede estar vacio.').notEmpty(),
     check('email','El email debe estar bien escrito.').isEmail(),
@@ -31,24 +31,33 @@ router.post("/escribir",[
 router.post("/login",[
   check('email','El email debe estar bien escrito.').isEmail(),
   check('email').custom(helpersUsuarios.Noexisteelcorreo),
+  validarCampos
 ],httpUsuarios.login
 )
+router.get("/email", [
+  check('email', 'El email debe estar bien escrito.').isEmail(),
+  check('email').custom(helpersUsuarios.Noexisteelcorreo),
+  validarCampos
+], httpUsuarios.getemail);
+
 
 router.put("/modificar/:id",[
   check('id').custom(helpersUsuarios.validarIdUsuario),
+  check('idSede').custom(helpersUsuarios.validarIdSede),
   check('nombre','El nombre no puede estar vacio.').notEmpty(),
   check('email','El email no puede estar vacio.').notEmpty(),
   check('email','El email debe estar bien escrito.').isEmail(),
+  check('email','El email debe estar bien escrito.').isEmail(),
   check('telefono','Minimo 9 caracteres.').isLength({min:9}),
   check('rol','debe especificar un rol').isString(),
-  check('password', 'Debe tener al menos 8 caracteres con al menos dos numeros incluidos.')
-      .isStrongPassword({ minLength: 8, minNumbers: 2 }),
+  // check('password', 'La contraseña debe contener al menos tres letras y tres números').custom(helpersUsuarios.validarPassword),
   validarCampos
 ],httpUsuarios.putUsuarios)
 
 router.put("/password/porid/:id",[
   check('id','Se necesita un mongoid valido').isMongoId(),
   check('id').custom(helpersUsuarios.validarIdUsuario),
+  check('password', 'La contraseña debe contener al menos tres letras y tres números').custom(helpersUsuarios.validarPassword),
   validarCampos
 ],httpUsuarios.putUsuariospassword)
 

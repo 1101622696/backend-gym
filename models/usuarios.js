@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const usuariosSchema=new mongoose.Schema({
-    id:{type:mongoose.Schema.Types.ObjectId,ref:'Sede',required:true},
+    idSede:{type:mongoose.Schema.Types.ObjectId,ref:'Sede',required:true},
     nombre:{type:String,required:true},
     email:{type:String,unique:true},
     telefono:{type:String,required:true},

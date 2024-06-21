@@ -6,13 +6,13 @@ const helpersUsuarios={
     validarIdSede:async (id)=>{
         const existe = await Sede.findById(id)
         if (existe==undefined){
-            throw new Error ("Id no existe")
+            throw new Error ("Id Sede no existe")
         }
     },
     validarIdUsuario:async (id)=>{
         const existe = await Usuario.findById(id)
         if (existe==undefined){
-            throw new Error ("Id no existe")
+            throw new Error ("Id Usuario no existe")
         }
     },
 
@@ -37,11 +37,17 @@ const helpersUsuarios={
             throw new Error("La contraseña debe contener al menos tres letras y tres números");
         }
     },
-Noexisteelcorreo: async(email) => {
-    if(email){
-        const existe = await Usuario.findOne((email))
-        if (!existe) throw new Error("El correo electrónico no es válido");
+// Noexisteelcorreo: async(email) => {
+//     if(email){
+//         const existe = await Usuario.findOne((email))
+//         if (!existe) throw new Error("El correo electrónico no es válido");
+//     }
+// },
+Noexisteelcorreo: async (email) => {
+    const user = await Usuario.findOne({ email: email });
+    if (!user) {
+      throw new Error("El correo electrónico no es válido");
     }
-},
+  }
 }
 export default helpersUsuarios
