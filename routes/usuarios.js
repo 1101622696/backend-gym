@@ -14,7 +14,11 @@ router.get("/listar",[validarJWT],httpUsuarios.getUsuarios)
 router.get("/listarid/:id",httpUsuarios.getUsuariosID)
 router.get("/listaractivados",httpUsuarios.getUsuariosactivados)
 router.get("/listardesactivados",httpUsuarios.getUsuariosdesactivados)
-
+router.get("/email", [
+  check('email', 'El email debe estar bien escrito.').isEmail(),
+  check('email').custom(helpersUsuarios.Noexisteelcorreo),
+  validarCampos
+], httpUsuarios.getemail);
 
 router.post("/escribir",[
   check('idSede').custom(helpersUsuarios.validarIdSede),
@@ -34,11 +38,12 @@ router.post("/login",[
   validarCampos
 ],httpUsuarios.login
 )
-router.get("/email", [
+router.post("/recuperar-password", [
   check('email', 'El email debe estar bien escrito.').isEmail(),
-  check('email').custom(helpersUsuarios.Noexisteelcorreo),
   validarCampos
-], httpUsuarios.getemail);
+], httpUsuarios.recuperarPassword);
+
+
 
 
 router.put("/modificar/:id",[
@@ -54,7 +59,7 @@ router.put("/modificar/:id",[
   validarCampos
 ],httpUsuarios.putUsuarios)
 
-router.put("/password/porid/:id",[
+router.put("/password/:id",[
   check('id','Se necesita un mongoid valido').isMongoId(),
   check('id').custom(helpersUsuarios.validarIdUsuario),
   check('password', 'La contraseña debe contener al menos tres letras y tres números').custom(helpersUsuarios.validarPassword),

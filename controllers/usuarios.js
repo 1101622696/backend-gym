@@ -1,6 +1,7 @@
 import sedes from "../models/sedes.js";
 import Usuario from "../models/usuarios.js";
 import bcryptjs from "bcryptjs";
+import { enviarCorreoRecuperacion } from '../helpers/email.js';
 import { generarJWT } from "../middlewares/validar-jwt.js";
 
 const httpUsuarios = {
@@ -72,15 +73,57 @@ const httpUsuarios = {
   putUsuariospassword: async (req, res) => {
     const { id } = req.params;
     const { password } = req.body;
+
+    // Log the password (not recommended in production)
     console.log(password);
 
-    const usuario = await Usuario.findByIdAndUpdate(
-      id,
-      { password },
-      { new: true }
-    );
-    res.json({ usuario });
+    // Check if password is provided
+    if (!password) {
+      return res.status(400).json({ msg: "Password is required" });
+    }
+
+    try {
+      // Encrypt the new password
+      const salt = bcryptjs.genSaltSync(10);
+      const hashedPassword = bcryptjs.hashSync(password, salt);
+
+      // Update the user with the new hashed password
+      const usuario = await Usuario.findByIdAndUpdate(
+        id,
+        { password: hashedPassword },
+        { new: true }
+      );
+
+      if (!usuario) {
+        return res.status(404).json({ msg: "User not found" });
+      }
+
+      res.json({ usuario });
+    } catch (error) {
+      console.error("Error actualizando password:", error);
+      res.status(500).json({ msg: "error de servidor" });
+    }
   },
+
+  // putUsuariospassword: async (req, res) => {
+  //   const { id } = req.params;
+  //   const { password } = req.body;
+  //   console.log(password);
+    
+  //   // const user = await Usuario.findById(id);
+    
+  //   const validacionpassword = bcryptjs.compareSync(password);
+  //   if (!validacionpassword) {
+  //     return res.status(401).json({ msg: "usuario o contraseña incorrecto" });
+  //   }
+    
+  //   const usuario = await Usuario.findByIdAndUpdate(
+  //     id,
+  //     { password },
+  //     { new: true }
+  //   );
+  //   res.json({ usuario });
+  // },
 
   putUsuariosActivar: async (req, res) => {
     const { id } = req.params;
@@ -145,6 +188,23 @@ login: async (req, res) => {
       return res.status(200).json({ msg: "Email válido" });
     } catch (error) {
       return res.status(500).json({ msg: "Comuníquese con el admin." });
+    }
+  },
+  recuperarPassword: async (req, res) => {
+    const { email } = req.body;
+    try {
+      const user = await Usuario.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ msg: 'Usuario no encontrado' });
+      }
+
+      const token = await generarJWT(user._id, user.rol);
+      await enviarCorreoRecuperacion(email, token);
+
+      res.json({ msg: 'Correo de recuperación enviado' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ msg: 'Error interno del servidor' });
     }
   },
   
