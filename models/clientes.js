@@ -10,7 +10,7 @@ const clientesSchema = new mongoose.Schema({
   observaciones: { type: String, default:"" },
   estado: { type: Number, default: 0 },
   idPlan:{type:mongoose.Schema.Types.ObjectId,ref:'Plan',required:true},
-  fechavencimiento: { type: Date, default:"" },
+  fechavencimiento: { type: Date},
   foto: { type: String, required: true },
   seguimiento: [
     {

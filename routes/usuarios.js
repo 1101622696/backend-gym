@@ -4,6 +4,7 @@ import { check } from 'express-validator'
 import { validarCampos } from '../middlewares/validar-campos.js'
 import helpersUsuarios from '../helpers/usuarios.js'
 import {validarJWT} from '../middlewares/validar-jwt.js'
+import httpClientes from '../controllers/clientes.js';  // Asegúrate de que la ruta sea correcta
 
 const router=Router()
 
@@ -43,8 +44,14 @@ router.post("/recuperar-password", [
   validarCampos
 ], httpUsuarios.recuperarPassword);
 
-
-
+router.post('/pruebaActualizarEstados', async (req, res) => {
+  try {
+      await httpClientes.actualizarEstados();
+      res.status(200).json({ message: 'Estados actualizados correctamente' });
+  } catch (error) {
+      res.status(500).json({ error: 'Error al actualizar estados' });
+  }
+});
 
 router.put("/modificar/:id",[
   check('id').custom(helpersUsuarios.validarIdUsuario),

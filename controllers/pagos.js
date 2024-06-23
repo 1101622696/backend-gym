@@ -1,5 +1,7 @@
 import Pago from "../models/pagos.js"
 import Plan from "../models/planes.js"
+import Cliente from "../models/clientes.js"
+
 
 
 const httpPagos = {
@@ -38,33 +40,55 @@ const httpPagos = {
 
     // postPagos: async (req, res) => {
     //     try {
-    //     const {idCliente,valor,idPlan, estado} = req.body
-    //     const pago = new Pago({idCliente,valor,idPlan, estado})
-    //     await pago.save()
-    //     res.json({ pago })
-    // }catch (error) {
-    //     res.status(400).json({ error: "No se pudo crear el registro" })
-    // }
+    //         const { idCliente, idPlan, estado } = req.body;
+    
+    //         const plan = await Plan.findById(idPlan);
+    //         if (!plan) {
+    //             return res.status(404).json({ error: "Plan no encontrado" });
+    //         }
+    
+    //         const valor = plan.valor;
+    
+    //         const pago = new Pago({ idCliente, idPlan, valor, estado });
+    //         await pago.save();
+    //         res.json({ pago });
+    //     } catch (error) {
+    //         res.status(400).json({ error: "No se pudo crear el registro" });
+    //     }
     // },
+
     postPagos: async (req, res) => {
         try {
-            const { idCliente, idPlan, estado } = req.body;
+          const { idCliente, idPlan, estado } = req.body;
     
-            // Obtener el plan para obtener su valor
-            const plan = await Plan.findById(idPlan);
-            if (!plan) {
-                return res.status(404).json({ error: "Plan no encontrado" });
-            }
+          const plan = await Plan.findById(idPlan);
+          if (!plan) {
+            return res.status(404).json({ error: "Plan no encontrado" });
+          }
     
-            const valor = plan.valor;
+          const valor = plan.valor;
+          const dias = plan.dias;
     
-            const pago = new Pago({ idCliente, idPlan, valor, estado });
-            await pago.save();
-            res.json({ pago });
+          // Calcular la fecha de vencimiento
+          const fechaVencimiento = new Date();
+          fechaVencimiento.setDate(fechaVencimiento.getDate() + dias);
+    
+          const pago = new Pago({ idCliente, idPlan, valor, estado });
+          await pago.save();
+    
+          // Actualizar la fecha de vencimiento del cliente
+          const cliente = await Cliente.findById(idCliente);
+          if (!cliente) {
+            return res.status(404).json({ error: "Cliente no encontrado" });
+          }
+          cliente.fechavencimiento = fechaVencimiento;
+          await cliente.save();
+    
+          res.json({ pago, cliente });
         } catch (error) {
-            res.status(400).json({ error: "No se pudo crear el registro" });
+          res.status(400).json({ error: "No se pudo crear el registro" });
         }
-    },
+      },
 
  putPagos: async (req, res) => {
         const { id } = req.params;
