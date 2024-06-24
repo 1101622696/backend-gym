@@ -83,11 +83,9 @@ const httpUsuarios = {
     }
 
     try {
-      // Encrypt the new password
       const salt = bcryptjs.genSaltSync(10);
       const hashedPassword = bcryptjs.hashSync(password, salt);
 
-      // Update the user with the new hashed password
       const usuario = await Usuario.findByIdAndUpdate(
         id,
         { password: hashedPassword },
