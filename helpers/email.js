@@ -16,7 +16,7 @@ export const enviarCorreoRecuperacion = async (email, token) => {
     from: 'proyectogymsena@gmail.com', 
     to: email,
     subject: 'Recuperación de contraseña',
-    text: `Utiliza el siguiente enlace para restablecer tu contraseña: https://backend-gym-1.onrender.com/#/Rescontrasena?token=${token}`,
+    text: `Utiliza el siguiente enlace para restablecer tu contraseña: https://proyecto-gimnasio.onrender.com/#/Rescontrasena?token=${token}`,
   };
 
   await transporter.sendMail(mailOptions);
