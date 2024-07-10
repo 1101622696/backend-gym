@@ -16,21 +16,6 @@ const helpersVentas={
         }
     },
 
-//     validarCantidadDisponible: async (id, cantidad) => {
-//       try {
-//           const inventario = await Inventario.findById(id);
-//           if (!inventario) {
-//               throw new Error("Inventario no encontrado");
-//           }
-//           if (cantidad > inventario.cantidad) {
-//               throw new Error("Cantidad excede la disponible en inventario");
-//           }
-//           return true;
-//       } catch (error) {
-//           throw error;
-//       }
-//   }
-
 
   validarCantidadDisponible: async (idInventario, cantidad) => {
     try {
@@ -45,13 +30,19 @@ const helpersVentas={
     } catch (error) {
         throw error;
     }
+},
+ajustarInventario: async (idProducto, diferencia) => {
+    const inventario = await Inventario.findById(idProducto);
+    if (!inventario) {
+        throw new Error("Producto no encontrado");
+    }
+    inventario.cantidad -= diferencia;
+    if (inventario.cantidad < 0) {
+        throw new Error("Cantidad en inventario no puede ser negativa");
+    }
+    await inventario.save();
 }
-// validarCantidadDisponible: async (cantidad, { req }) => {
-//     const inventario = await Inventario.findById(req.body.idInventario);
-//     if (inventario && cantidad > inventario.cantidadMaxima) {
-//       throw new Error('No puede digitar una cantidad superior al máximo establecido');
-//     }
-//   }
+
   
     }
 

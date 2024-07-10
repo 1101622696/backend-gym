@@ -59,16 +59,30 @@ const httpVentas = {
   //   res.json({ venta });
   // },
   putVentas: async (req, res) => {
-    const { id } = req.params;
-    const { idInventario, valorUnitario, cantidad, ...resto } = req.body;
-
     try {
-      const venta = await Venta.findByIdAndUpdate(id, { idInventario, valorUnitario, cantidad, ...resto }, { new: true });
-      res.json({ venta });
+        const { id } = req.params;
+        const { valorUnitario, idProducto, cantidad } = req.body;
+
+        await helpersVentas.validarIdProducto(idProducto);
+        await helpersVentas.validarCantidadDisponible(idProducto, cantidad);
+
+        const ventaOriginal = await Venta.findById(id);
+        if (!ventaOriginal) {
+            throw new Error("Venta no encontrada");
+        }
+
+        const diferencia = cantidad - ventaOriginal.cantidad;
+
+        const ventaActualizada = await Venta.findByIdAndUpdate(id, { valorUnitario, idProducto, cantidad }, { new: true });
+
+        await helpersVentas.ajustarInventario(idProducto, diferencia);
+
+        res.json({ venta: ventaActualizada });
     } catch (error) {
-      return res.status(500).json({ msg: "Comuníquese con el admin." });
+        console.error("Error updating ventas:", error);
+        res.status(400).json({ error: error.message || "No se pudo actualizar la venta" });
     }
-  },
+}
 };
 
 export default httpVentas;
