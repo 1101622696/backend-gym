@@ -15,7 +15,7 @@ router.get("/listar",httpClientes.getClientes)
 router.get("/listarid/:id",httpClientes.getClientesID)
 router.get("/seguimiento",httpClientes.getSeguimientoCliente)
 router.get("/porplan/:id",httpClientes.getClientesPorPlan)
-router.get("/cumpleanos",httpClientes.getClientesPorCumpleaños)
+router.get("/cumpleanos",httpClientes.getClientesPorCumpleanos);
 router.get("/listaractivados",httpClientes.getClientesactivados)
 router.get("/listardesactivados",httpClientes.getClientesdesactivados)
 
@@ -47,6 +47,12 @@ router.put("/modificar/seguimiento/:id",[
   validarCampos
 ],httpClientes.putClienteSeguimiento)
 
+router.put("/editar/seguimiento/:id/:seguimientoId", [
+  check('id','Se necesita un mongoid valido').isMongoId(),
+  check('seguimientoId','Se necesita un mongoid valido').isMongoId(),
+  check('id').custom(helpersClientes.validarExistaIdcliente),
+  validarCampos
+],httpClientes.putEditaSeguimiento);
 
 
 router.put("/activar/activados/:id",[

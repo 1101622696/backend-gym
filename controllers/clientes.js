@@ -50,33 +50,46 @@ const httpClientes = {
         }
     },
 
-    getClientesPorCumpleaños: async (req, res) => {
+    getClientesPorCumpleanos: async (req, res) => {
         try {
-            const { dia, mes } = req.query; 
-
+            const { dia, mes } = req.query;
+            
+            console.log(`Recibida solicitud para día ${dia} y mes ${mes}`);
+    
             const day = parseInt(dia);
             const month = parseInt(mes);
-
+    
+            console.log(`Valores parseados: día=${day}, mes=${month}`);
+    
             if (isNaN(day) || isNaN(month) || day < 1 || day > 31 || month < 1 || month > 12) {
+                console.log(`Valores inválidos: día=${day}, mes=${month}`);
                 return res.status(400).json({ error: "Día y mes inválidos" });
             }
-
+    
+            console.log(`Buscando clientes nacidos el día ${day} del mes ${month}`);
+    
             const clientes = await Cliente.find({
                 $expr: {
                     $and: [
-                        { $eq: [{ $dayOfMonth: "$fechaNacimiento" }, day] }, 
-                        { $eq: [{ $month: "$fechaNacimiento" }, month] } 
+                        { $eq: [{ $dayOfMonth: "$fechaNacimiento" }, day] },
+                        { $eq: [{ $month: "$fechaNacimiento" }, month] }
                     ]
                 }
             });
-
+    
+            console.log(`Encontrados ${clientes.length} clientes`);
+    
+            // Imprimir detalles de los clientes encontrados
+            clientes.forEach(cliente => {
+                console.log(`Cliente: ${cliente._id}, Nombre: ${cliente.nombre}, Fecha de nacimiento: ${cliente.fechaNacimiento}`);
+            });
+    
             res.json({ clientes });
         } catch (error) {
             console.error("Error al obtener clientes por día y mes de cumpleaños:", error);
             res.status(500).json({ error: "Error interno del servidor" });
         }
     },
-
     getClientesactivados: async (req, res) => {
         try {
             const activados = await Cliente.find({ estado: 1 });
@@ -156,6 +169,60 @@ const httpClientes = {
             res.status(500).json({ error: "Error interno del servidor" });
           }
         },    
+        putEditaSeguimiento: async (req, res) => {
+            const { id, seguimientoId } = req.params;
+            const { seguimiento } = req.body;
+          
+            console.log("Datos recibidos:", seguimiento);
+          
+            if (!seguimiento || !Array.isArray(seguimiento) || seguimiento.length === 0) {
+              return res.status(400).json({ error: "Formato de seguimiento incorrecto" });
+            }
+          
+            const { peso, altura, brazo, edad } = seguimiento[0];
+          
+            try {
+              const cliente = await Cliente.findById(id);
+              if (!cliente) {
+                return res.status(404).json({ error: "Cliente no encontrado" });
+              }
+          
+              const seguimientoItem = cliente.seguimiento.id(seguimientoId);
+              if (!seguimientoItem) {
+                return res.status(404).json({ error: "Seguimiento no encontrado" });
+              }
+          
+              // Verificar que los valores de peso y altura sean válidos
+              if (isNaN(peso) || isNaN(altura) || peso <= 0 || altura <= 0) {
+                console.log("Valores de peso o altura no válidos:", { peso, altura });
+                return res.status(400).json({ error: "Valores de peso o altura no válidos" });
+              }
+          
+              // Calcular el IMC
+              const alturaEnMetros = altura / 100;
+              const imc = peso / (alturaEnMetros * alturaEnMetros);
+          
+              // Verificar que el IMC calculado sea un número válido
+              if (isNaN(imc)) {
+                console.log("Error en el cálculo del IMC:", { imc });
+                return res.status(400).json({ error: "Error en el cálculo del IMC" });
+              }
+          
+              // Actualizar los campos del seguimiento encontrado
+              seguimientoItem.peso = peso;
+              seguimientoItem.altura = altura;
+              seguimientoItem.brazo = brazo;
+              seguimientoItem.edad = edad;
+              seguimientoItem.imc = imc.toFixed(2);
+          
+              await cliente.save();
+          
+              res.status(200).json({ message: "Seguimiento actualizado", cliente });
+            } catch (error) {
+              console.error("Error al actualizar el seguimiento", error);
+              res.status(500).json({ error: "Error interno del servidor" });
+            }
+          },
 
     putClienteActivar: async (req, res) => {
         const { id } = req.params;
