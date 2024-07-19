@@ -21,7 +21,9 @@ const helpersUsuarios={
             setTimeout(() => {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(email)) {
-                    reject(new Error("El correo electrónico no es válido"));
+                    console.log('El correo electrónico no es válido');
+                    
+                    reject(new Error("usuario o contraseña incorrecto"));
                 } else {
                     resolve();
                 }
@@ -46,7 +48,9 @@ const helpersUsuarios={
 Noexisteelcorreo: async (email) => {
     const user = await Usuario.findOne({ email: email });
     if (!user) {
-      throw new Error("El correo electrónico no es válido");
+      throw new Error("usuario o contraseña incorrecto");
+      console.log('El correo electrónico no es válido');
+
     }
   }
 }

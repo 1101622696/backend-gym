@@ -23,10 +23,10 @@ router.get("/listardesactivados",httpClientes.getClientesdesactivados)
 router.post("/escribir",[
     check('nombre','El documento no puede estar vacio.').notEmpty(),
     check('documento','Minimo 6 caracteres.').isLength({min:6}),
+    check('documento').custom(helpersClientes.validarDocumentoUnico),
     check('idPlan','Se necesita un mongoid valido').isMongoId(),
     check('idPlan').custom(helpersClientes.validaridPlan),
     check('telefono', 'minimo 9 caracteres.').isLength({min:9}),
-    // check('telefono').custom(helpersClientes.validarTelefono),
     validarCampos
 ],httpClientes.postClientes)
 

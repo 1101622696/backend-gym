@@ -3,8 +3,8 @@ import Inventario from "../models/inventario.js"
 
 
 const helpersVentas={
-    validarIdInventario:async (id)=>{
-        const existe = await Inventario.findById(id)
+    validarIdInventario:async (idInventario)=>{
+        const existe = await Inventario.findById(idInventario)
         if (existe==undefined){
             throw new Error ("Id no existe")
         }

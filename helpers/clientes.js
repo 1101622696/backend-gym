@@ -27,6 +27,12 @@ validarTelefono: async (telefono) => {
     if (!telefonoRegex.test(telefono)) {
         throw new Error("El teléfono debe tener el formato ###-###-####");
     }
+},
+validarDocumentoUnico: async (documento) => {
+    const existe = await Cliente.findOne({ documento });
+    if (existe) {
+        throw new Error("El documento ya está registrado");
+    }
 }
     
 }

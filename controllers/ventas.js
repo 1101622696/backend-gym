@@ -3,6 +3,7 @@
 import Venta from "../models/ventas.js";
 import Inventario from "../models/inventario.js";
 import Contador from "../models/contador.js";
+import helpersVentas from "../helpers/ventas.js";
 
 const obtenerSiguienteCodigo = async () => {
   const nombreContador = 'ventas';
@@ -61,10 +62,10 @@ const httpVentas = {
   putVentas: async (req, res) => {
     try {
         const { id } = req.params;
-        const { valorUnitario, idProducto, cantidad } = req.body;
+        const { valorUnitario, idInventario, cantidad } = req.body;
 
-        await helpersVentas.validarIdProducto(idProducto);
-        await helpersVentas.validarCantidadDisponible(idProducto, cantidad);
+        await helpersVentas.validarIdInventario(idInventario);
+        await helpersVentas.validarCantidadDisponible(idInventario, cantidad);
 
         const ventaOriginal = await Venta.findById(id);
         if (!ventaOriginal) {
@@ -73,9 +74,9 @@ const httpVentas = {
 
         const diferencia = cantidad - ventaOriginal.cantidad;
 
-        const ventaActualizada = await Venta.findByIdAndUpdate(id, { valorUnitario, idProducto, cantidad }, { new: true });
+        const ventaActualizada = await Venta.findByIdAndUpdate(id, { valorUnitario, idInventario, cantidad }, { new: true });
 
-        await helpersVentas.ajustarInventario(idProducto, diferencia);
+        await helpersVentas.ajustarInventario(idInventario, diferencia);
 
         res.json({ venta: ventaActualizada });
     } catch (error) {

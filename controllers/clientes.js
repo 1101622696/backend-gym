@@ -1,4 +1,5 @@
 import Cliente from "../models/clientes.js"
+import helpersClientes from "../helpers/clientes.js";
 
 const httpClientes = {
 
@@ -110,27 +111,54 @@ const httpClientes = {
     }
     },
 
+    // postClientes: async (req, res) => {
+    //     try {
+    //     const {nombre, fechaIngreso, documento,direccion,fechaNacimiento,telefono,observaciones,estado,idPlan,fechavencimiento,foto, seguimiento} = req.body
+    //     const cliente = new Cliente({nombre, fechaIngreso, documento,direccion,fechaNacimiento,telefono,observaciones,estado,idPlan,fechavencimiento,foto, seguimiento})
+    //     await cliente.save()
+    //     res.json({ cliente })
+    // }catch (error) {
+    //     console.log(error);
+    //     res.status(400).json({ error: "No se pudo crear el registro" })
+    // }
+    // },
+
     postClientes: async (req, res) => {
         try {
-        const {nombre, fechaIngreso, documento,direccion,fechaNacimiento,telefono,observaciones,estado,idPlan,fechavencimiento,foto, seguimiento} = req.body
-        const cliente = new Cliente({nombre, fechaIngreso, documento,direccion,fechaNacimiento,telefono,observaciones,estado,idPlan,fechavencimiento,foto, seguimiento})
-        await cliente.save()
-        res.json({ cliente })
-    }catch (error) {
-        console.log(error);
-        res.status(400).json({ error: "No se pudo crear el registro" })
-    }
-    },
+          const { nombre, fechaIngreso, documento, direccion, fechaNacimiento, telefono, observaciones, estado, idPlan, fechavencimiento, foto, seguimiento } = req.body;
+          
+          // Verificar si el documento ya existe usando el helper
+          await helpersClientes.validarDocumentoUnico(documento);
+      
+          // Si no existe, proceder a crear el cliente
+          const cliente = new Cliente({ nombre, fechaIngreso, documento, direccion, fechaNacimiento, telefono, observaciones, estado, idPlan, fechavencimiento, foto, seguimiento });
+          await cliente.save();
+      
+          res.json({ cliente });
+        } catch (error) {
+          console.log(error);
+          res.status(400).json({ error: error.message || "Documento duplicado" });
+        }
+      },  
 
-
-    putClientes: async (req, res) => {
-        const { id } = req.params
-        const { _id, estado,  ...resto } = req.body
-        console.log(resto);
-
-        const cliente = await Cliente.findByIdAndUpdate(id, resto, { new: true })
-        res.json({ cliente })
-    },
+      putClientes: async (req, res) => {
+        try {
+          const { id } = req.params;
+          const { _id, estado, ...resto } = req.body;
+      
+          // Verificar si el documento ya existe y no es el del cliente actual
+        //   if (resto.documento) {
+        //     await helpersClientes.validarDocumentoUnico(resto.documento, id);
+        //   }
+      
+          const clienteActualizado = await Cliente.findByIdAndUpdate(id, resto, { new: true });
+      
+          res.json({ cliente: clienteActualizado });
+        } catch (error) {
+          console.error("Error updating cliente:", error);
+          res.status(400).json({ error: error.message || "No se pudo actualizar el cliente" });
+        }
+      },
   
 
     putClienteSeguimiento: async (req, res) => {
