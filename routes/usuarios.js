@@ -26,6 +26,7 @@ router.post("/escribir",[
     check('nombre','El nombre no puede estar vacio.').notEmpty(),
     check('email','El email no puede estar vacio.').notEmpty(),
     check('email','El email debe estar bien escrito.').isEmail(),
+    check("email").custom(helpersUsuarios.emailExiste),
     check('telefono','Minimo 9 caracteres.').isLength({min:9}),
     check('email','El email debe estar bien escrito.').custom(helpersUsuarios.validarEmail),
     check('rol','debe especificar un rol').isString(),
@@ -60,11 +61,13 @@ router.put("/modificar/:id",[
   check('email','El email no puede estar vacio.').notEmpty(),
   check('email','El email debe estar bien escrito.').isEmail(),
   check('email','El email debe estar bien escrito.').isEmail(),
+  check("email").custom((email, { req }) => helpersUsuarios.emailExisteExceptoPropio(email, req.params.id)),
   check('telefono','Minimo 9 caracteres.').isLength({min:9}),
   check('rol','debe especificar un rol').isString(),
   // check('password', 'La contraseña debe contener al menos tres letras y tres números').custom(helpersUsuarios.validarPassword),
   validarCampos
 ],httpUsuarios.putUsuarios)
+
 
 router.put("/password/:id",[
   check('id','Se necesita un mongoid valido').isMongoId(),
@@ -84,6 +87,6 @@ router.put("/desactivar/desactivados/:id",[
   check('id').custom(helpersUsuarios.validarIdUsuario),
   validarCampos
 ],httpUsuarios.putUsuariosDesactivar)
- 
+
 
 export default router

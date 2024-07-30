@@ -18,6 +18,7 @@ const httpPlanes = {
             {
                 $or: [
                     { descripcion: new RegExp(busqueda, "i") },
+                    {codigo: new RegExp(busqueda, "i")},
                 ]
             }
         )

@@ -16,17 +16,61 @@ const obtenerSiguienteCodigo = async () => {
 };
 
 const httpVentas = {
-  getVentas: async (req, res) => {
+
+getVentas: async (req, res) => {
+  try {
     const { busqueda } = req.query;
-    const venta = await Venta.find();
+    let criteria = {};
+
+    if (!isNaN(busqueda)) {
+      criteria.codigo = Number(busqueda);
+    } else {}
+
+    const venta = await Venta.find(criteria);
     res.json({ venta });
-  },
+  } catch (error) {
+    console.error("Error al obtener ventas por busqueda de :", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+},
+
 
   getVentasID: async (req, res) => {
     const { id } = req.params;
     const venta = await Venta.findById(id);
     res.json({ venta });
   },
+
+  getVentasporproducto :async (req, res) => {
+    try {
+        const { id } = req.params;
+        const venta = await Venta.find({ idInventario: id });
+        res.json({ venta });
+    } catch (error) {
+        console.error("Error al obtener ventas por ID de producto:", error);
+        res.status(500).json({ error: "Error interno del servidor" });
+    }
+},
+
+getVentasPorFecha: async (req, res) => {
+  try {
+      const { fecha } = req.query;
+
+      const fechaInicio = new Date(fecha);
+      const fechaFin = new Date(fecha);
+      fechaFin.setDate(fechaFin.getDate() + 1);
+
+      const venta = await Venta.find({
+          fecha: {
+              $gte: fechaInicio,
+              $lt: fechaFin
+          }});
+      res.json({ venta });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error al obtener las ventas por fecha' });
+  }
+},
 
   postVentas: async (req, res) => {
     try {

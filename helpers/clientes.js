@@ -33,8 +33,15 @@ validarDocumentoUnico: async (documento) => {
     if (existe) {
         throw new Error("El documento ya está registrado");
     }
-}
-    
+},
+
+documentoExisteExceptoPropio: async (documento, id) => {
+    const existe = await Cliente.findOne({ documento, _id: { $ne: id } });
+    if (existe) {
+        throw new Error("El documento ya está registrado");
+    }},
+
+
 }
 
 export default helpersClientes

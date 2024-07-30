@@ -8,12 +8,11 @@ import {validarJWT} from '../middlewares/validar-jwt.js'
 const router=Router()
 
 router.get("/listar",[validarJWT],httpPagos.getPagos)
-
 router.get("/listarid/:id",httpPagos.getPagosID)
-
 router.get("/listaractivados",httpPagos.getPagosactivados)
-
 router.get("/listardesactivados",httpPagos.getPagosdesactivados)
+router.get("/listarnombre",httpPagos.getPagosNombre)
+router.get("/listarfecha",httpPagos.getPagosPorFecha)
 
 
 router.post("/escribir",[
@@ -28,7 +27,7 @@ router.put("/modificar/:id",[
   check('id','Se necesita un mongoid valido').isMongoId(),
   check('id').custom(helpersPagos.validarIdPago),
   check('idCliente').custom(helpersPagos.validarIdCliente),
-  check('idPlan').custom(helpersPagos.validaridPlan),  
+  check('idPlan').custom(helpersPagos.validaridPlan),
   validarCampos
 ],httpPagos.putPagos)
 

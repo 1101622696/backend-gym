@@ -8,8 +8,9 @@ import {validarJWT} from '../middlewares/validar-jwt.js'
 const router=Router()
 
 router.get("/listar",[validarJWT],httpMantenimiento.getMantenimiento)
-
 router.get("/listarid/:id",httpMantenimiento.getMantenimientoID)
+router.get("/listarporfecha",httpMantenimiento.getMantenimientoPorFecha)
+router.get("/listarpormaquina/:id",httpMantenimiento.getMantenimientoPorMaquina)
 
 router.post("/escribir",[
     check('idMantenimiento','Se necesita un mongoId valido').isMongoId(),

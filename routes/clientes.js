@@ -31,7 +31,8 @@ router.post("/escribir",[
 ],httpClientes.postClientes)
 
 
-router.put("/modificar/:id",[    
+router.put("/modificar/:id",[
+  check("documento").custom((documento, { req }) => helpersClientes.documentoExisteExceptoPropio(documento, req.params.id)),
     check('nombre','El documento no puede estar vacio.').notEmpty(),
     check('observaciones','las observaciones no puede estar vacias.').notEmpty(),
     check('documento','Minimo 6 caracteres.').isLength({min:6}),
@@ -60,13 +61,13 @@ router.put("/activar/activados/:id",[
     check('id').custom(helpersClientes.validarExistaIdcliente),
     validarCampos
   ],httpClientes.putClienteActivar)
-  
+
   router.put("/desactivar/desactivados/:id",[
     check('id','Se necesita un mongoid valido').isMongoId(),
     check('id').custom(helpersClientes.validarExistaIdcliente),
     validarCampos
   ],httpClientes.putClienteDesactivar)
-  
+
 
 
 

@@ -8,10 +8,12 @@ import {validarJWT} from '../middlewares/validar-jwt.js'
 const router=Router()
 
 router.get("/listar",[validarJWT],httpIngresos.getIngresos)
+router.get("/listarnombre",httpIngresos.getIngresosNombre)
+router.get("/listar",httpIngresos.getIngresos)
+
 // router.get("/listar",httpIngresos.getIngresos)
-
-
 router.get("/listarid/:id",httpIngresos.getIngresosID)
+router.get("/listarfecha",httpIngresos.getIngresosPorFecha)
 
 router.post("/escribir",[
     check('idSede','Se necesita un mongoId valido').isMongoId(),

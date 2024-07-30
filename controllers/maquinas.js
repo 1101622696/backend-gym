@@ -19,6 +19,7 @@ const httpMaquinas = {
             {
                 $or: [
                     { descripcion: new RegExp(busqueda, "i") },
+                    {codigo: new RegExp(busqueda, "i")},
                 ]
             }
         )
@@ -26,9 +27,13 @@ const httpMaquinas = {
     },
 
     getMaquinasID: async (req, res) => {
+        try {
         const { id } = req.params
         const maquina = await Maquina.findById(id)
         res.json({ maquina })
+    }catch (error) {
+        res.status(400).json({ error: "no se pudo listar la maquina" })
+    }
     },
 
     postMaquinas: async (req, res) => {

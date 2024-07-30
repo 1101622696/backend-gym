@@ -3,10 +3,21 @@ import Sede from "../models/sedes.js"
 const httpSedes = {
 
     getSedes: async (req, res) => {
+        try {
         const {busqueda} = req.query
-        const sede = await Sede.find()
+        const sede = await Sede.find(
+            {
+                $or: [
+                    { nombre: new RegExp(busqueda, "i") },
+                    {ciudad: new RegExp(busqueda, "i")},
+                ]
+            }
+        )
         res.json({sede})
-    },
+    } catch (error) {
+        console.error("Error al obtener sedes :", error);
+        res.status(500).json({ error: "Error interno del servidor" });
+    }},
 
     getSedesID: async (req, res) => {
         const { id } = req.params

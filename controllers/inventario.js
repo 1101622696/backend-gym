@@ -10,21 +10,26 @@ const obtenerSiguienteCodigo = async () => {
     );
     return contadori.valor;
   };
-  
+
 
 const httpInventario = {
 
     getInventario: async (req, res) => {
+        try {
         const {busqueda} = req.query
         const inventario = await Inventario.find(
             {
                 $or: [
                     { descripcion: new RegExp(busqueda, "i") },
+                     {codigo: new RegExp(busqueda, "i")},
                 ]
             }
         )
         res.json({inventario})
-    },
+    } catch (error) {
+        console.error("Error al obtener sedes :", error);
+        res.status(500).json({ error: "Error interno del servidor" });
+    }},
 
 getInventarioID: async (req, res) => {
         const { id } = req.params

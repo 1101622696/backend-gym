@@ -8,8 +8,10 @@ import {validarJWT} from '../middlewares/validar-jwt.js'
 const router=Router()
 
 router.get("/listar",[validarJWT],httpVentas.getVentas)
-
+router.get("/listar",httpVentas.getVentas)
 router.get("/listarid/:id",httpVentas.getVentasID)
+router.get("/listarporproducto/:id",httpVentas.getVentasporproducto)
+router.get("/listarporfecha",httpVentas.getVentasPorFecha)
 
 // router.post("/escribir",[
 //   check('idInventario', 'mongo id').isMongoId(),
@@ -38,9 +40,9 @@ router.post("/escribir", [
     }),
     validarCampos
   ], httpVentas.postVentas);
-  
 
-router.put("/modificar/:id",[  
+
+router.put("/modificar/:id",[
     check('id').custom(helpersVentas.validarIdVentas),
     check('idInventario').custom(helpersVentas.validarIdInventario),
 check('valorUnitario','no puede estar vacio el valor unitario y debe ser en numero.').notEmpty().isNumeric(),

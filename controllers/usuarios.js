@@ -8,7 +8,8 @@ const httpUsuarios = {
   getUsuarios: async (req, res) => {
     const { busqueda } = req.query;
     const usuario = await Usuario.find({
-      $or: [{ nombre: new RegExp(busqueda, "i") }],
+      $or: [{ nombre: new RegExp(busqueda, "i") },
+      {email: new RegExp(busqueda, "i")}],
     });
     res.json({ usuario });
   },
@@ -62,12 +63,17 @@ const httpUsuarios = {
   },
 
   putUsuarios: async (req, res) => {
+    try{
     const { id } = req.params;
     const { _id, estado, password,  ...resto } = req.body;
     console.log(resto);
 
     const usuario = await Usuario.findByIdAndUpdate(id, resto, { new: true });
     res.json({ usuario });
+    } catch  (error) {
+      console.log(error);
+      res.status(400).json({ error: "No se pudo modificar el usuario" });
+    }
   },
 
   putUsuariospassword: async (req, res) => {
@@ -107,14 +113,14 @@ const httpUsuarios = {
   //   const { id } = req.params;
   //   const { password } = req.body;
   //   console.log(password);
-    
+
   //   // const user = await Usuario.findById(id);
-    
+
   //   const validacionpassword = bcryptjs.compareSync(password);
   //   if (!validacionpassword) {
   //     return res.status(401).json({ msg: "usuario o contraseña incorrecto" });
   //   }
-    
+
   //   const usuario = await Usuario.findByIdAndUpdate(
   //     id,
   //     { password },
@@ -173,7 +179,7 @@ login: async (req, res) => {
   }
 },
 
-  
+
   getemail: async (req, res) => {
     const { email } = req.query;
     try {
@@ -205,6 +211,6 @@ login: async (req, res) => {
       res.status(500).json({ msg: 'Error interno del servidor' });
     }
   },
-  
+
 };
 export default httpUsuarios;

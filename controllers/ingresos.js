@@ -1,4 +1,5 @@
 import Ingreso from "../models/ingresos.js"
+import Cliente from "../models/clientes.js"
 
 const httpIngresos = {
 
@@ -6,16 +7,46 @@ const httpIngresos = {
         const ingreso = await Ingreso.find()
         res.json({ingreso})
     },
-    //  getIngresos: async (req, res) => {
-    //     try {
-    //       const ingresos = await Ingreso.find().sort({ fecha: -1 }); // Ordena por fecha descendente
-    //       res.json({ ingresos });
-    //     } catch (error) {
-    //       console.error("Error al listar ingresos:", error);
-    //       res.status(500).json({ error: "Error al listar ingresos" });
-    //     }
-    //   },
-      
+
+
+    getIngresosNombre: async (req, res) => {
+        try {
+            const {busqueda} = req.query
+
+            const clientes = await Cliente.find({$or: [ { nombre: new RegExp(busqueda, "i")}, {documento:new RegExp(busqueda, "i")}]});
+
+            const clienteIds = clientes.map(cliente => cliente._id);
+
+            const ingresos = await Ingreso.find({ idCliente: { $in: clienteIds } });
+
+            res.json({ ingresos });
+          } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Error del servidor" });
+          }},
+
+
+    getIngresosPorFecha: async (req, res) => {
+        try {
+            const { fecha } = req.query;
+
+            const fechaInicio = new Date(fecha);
+            const fechaFin = new Date(fecha);
+            fechaFin.setDate(fechaFin.getDate() + 1);
+
+            const ingresos = await Ingreso.find({
+                fecha: {
+                    $gte: fechaInicio,
+                    $lt: fechaFin
+                }});
+            res.json({ ingresos });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Error al obtener los ingresos por fecha' });
+        }
+    },
+
+
 
     getIngresosID: async (req, res) => {
         const { id } = req.params

@@ -20,6 +20,38 @@ getMantenimientoID: async (req, res) => {
         res.json({ mantenimiento })
     },
 
+    getMantenimientoPorMaquina :async (req, res) => {
+        try {
+            const { id } = req.params;
+            const mantenimiento = await Mantenimiento.find({ idMantenimiento: id });
+            res.json({ mantenimiento });
+        } catch (error) {
+            console.error("Error al obtener mantenimientos por ID de maquina:", error);
+            res.status(500).json({ error: "Error interno del servidor" });
+        }
+    },
+
+    getMantenimientoPorFecha: async (req, res) => {
+        try {
+            const { fecha } = req.query;
+
+            const fechaInicio = new Date(fecha);
+            const fechaFin = new Date(fecha);
+            fechaFin.setDate(fechaFin.getDate() + 1);
+
+            const mantenimiento = await Mantenimiento.find({
+                fecha: {
+                    $gte: fechaInicio,
+                    $lt: fechaFin
+                }});
+            res.json({ mantenimiento });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Error al obtener los mantenimientos por fecha' });
+        }
+    },
+
+
     postMantenimiento: async (req, res) => {
         try {
         const {idMantenimiento,fecha,descripcion,responsable,valor} = req.body
