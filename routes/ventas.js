@@ -42,18 +42,17 @@ router.post("/escribir", [
   ], httpVentas.postVentas);
 
 
-router.put("/modificar/:id",[
+  router.put("/modificar/:id", [
     check('id').custom(helpersVentas.validarIdVentas),
     check('idInventario').custom(helpersVentas.validarIdInventario),
-check('valorUnitario','no puede estar vacio el valor unitario y debe ser en numero.').notEmpty().isNumeric(),
-check('cantidad','no puede estar vacio la cantidad y debe ser en numeros.').notEmpty().isNumeric(),
-check('cantidad', 'No puede superar la cantidad establecida en inventario').custom(async (cantidad, { req }) => {
-    await helpersVentas.validarCantidadDisponible(req.body.idInventario, cantidad);
-    return true;
-  }),validarCampos
-],httpVentas.putVentas)
-
-
+    check('valorUnitario', 'El valor unitario no puede estar vacío y debe ser un número.').notEmpty().isNumeric(),
+    check('cantidad', 'La cantidad no puede estar vacía y debe ser un número.').notEmpty().isNumeric(),
+    check('cantidad', 'No puede superar la cantidad establecida en inventario').custom(async (cantidad, { req }) => {
+      await helpersVentas.validarCantidadDisponible(req.body.idInventario, cantidad);
+      return true;
+    }),
+    validarCampos
+  ], httpVentas.putVentas);
 
 
 export default router
