@@ -54,21 +54,22 @@ getVentas: async (req, res) => {
 
 getVentasPorFecha: async (req, res) => {
   try {
-      const { fecha } = req.query;
+    const { fechaInicio, fechaFin } = req.query;
+    if (!fechaInicio || !fechaFin) {
+      return res.status(400).json({ message: 'Fechas de inicio y fin son requeridas' });
+    }
 
-      const fechaInicio = new Date(fecha);
-      const fechaFin = new Date(fecha);
-      fechaFin.setDate(fechaFin.getDate() + 1);
+    const ventas = await Venta.find({
+      fecha: {
+        $gte: new Date(fechaInicio),
+        $lte: new Date(fechaFin)
+      }
+    });
 
-      const venta = await Venta.find({
-          fecha: {
-              $gte: fechaInicio,
-              $lt: fechaFin
-          }});
-      res.json({ venta });
+    res.json({ ventas });
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error al obtener las ventas por fecha' });
+    console.error('Error al obtener las ventas por fecha:', error);
+    res.status(500).json({ message: 'Error al obtener las ventas por fecha' });
   }
 },
 
@@ -103,30 +104,31 @@ getVentasPorFecha: async (req, res) => {
   //   const venta = await Venta.findByIdAndUpdate(id, resto, { new: true });
   //   res.json({ venta });
   // },
-   putVentas: async (req, res) => {
+  putVentas: async (req, res) => {
     try {
-      const { id } = req.params;
-      const { valorUnitario, idInventario, cantidad } = req.body;
-  
-      await helpersVentas.validarIdInventario(idInventario);
-      await helpersVentas.validarCantidadDisponible(idInventario, cantidad);
-  
-      const ventaOriginal = await Venta.findById(id);
-      if (!ventaOriginal) {
-        throw new Error("Venta no encontrada");
-      }
-  
-      const diferencia = cantidad - ventaOriginal.cantidad;
-      const ventaActualizada = await Venta.findByIdAndUpdate(id, { valorUnitario, idInventario, cantidad }, { new: true });
-  
-      await helpersVentas.ajustarInventario(idInventario, diferencia);
-  
-      res.json({ venta: ventaActualizada });
+        const { id } = req.params;
+        const { valorUnitario, idInventario, cantidad } = req.body;
+
+        await helpersVentas.validarIdInventario(idInventario);
+        await helpersVentas.validarCantidadDisponible(idInventario, cantidad);
+
+        const ventaOriginal = await Venta.findById(id);
+        if (!ventaOriginal) {
+            throw new Error("Venta no encontrada");
+        }
+
+        const diferencia = cantidad - ventaOriginal.cantidad;
+
+        const ventaActualizada = await Venta.findByIdAndUpdate(id, { valorUnitario, idInventario, cantidad }, { new: true });
+
+        await helpersVentas.ajustarInventario(idInventario, diferencia);
+
+        res.json({ venta: ventaActualizada });
     } catch (error) {
-      console.error("Error updating ventas:", error);
-      res.status(400).json({ error: error.message || "No se pudo actualizar la venta" });
+        console.error("Error updating ventas:", error);
+        res.status(400).json({ error: error.message || "No se pudo actualizar la venta" });
     }
-  },
+}
 };
 
 export default httpVentas;
