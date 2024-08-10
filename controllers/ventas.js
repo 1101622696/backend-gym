@@ -96,14 +96,6 @@ getVentasPorFecha: async (req, res) => {
     }
   },
 
-  // putVentas: async (req, res) => {
-  //   const { id } = req.params;
-  //   const { _id, codigo, fecha, total, ...resto } = req.body;
-  //   console.log(resto);
-
-  //   const venta = await Venta.findByIdAndUpdate(id, resto, { new: true });
-  //   res.json({ venta });
-  // },
   putVentas: async (req, res) => {
     try {
         const { id } = req.params;

@@ -17,7 +17,7 @@ router.post("/escribir",[
     check('descripcion','la descripcion no puede estar vacio.').notEmpty(),
     check('descripcion','Minimo 2 caracteres.').isLength({min:2}),
     check('valor','solo numeros').isNumeric(),
-    check('cantidad','solo numeros').isNumeric(),
+    // check('cantidad','solo numeros').isNumeric(),
     validarCampos
 ],httpInventario.postInventario)
 
@@ -27,7 +27,7 @@ router.put("/modificar/:id",[
     check('descripcion','la descripcion no puede estar vacio.').notEmpty(),
 check('descripcion','Minimo 4 caracteres.').isLength({min:6}),
 check('valor','solo numeros').isNumeric(),
-check('cantidad','solo numeros').isNumeric(),
+// check('cantidad','solo numeros').isNumeric(),
 validarCampos
 ],httpInventario.putInventario)
 

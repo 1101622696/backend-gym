@@ -31,8 +31,8 @@ const helpersVentas={
         throw error;
     }
 },
-ajustarInventario: async (idProducto, diferencia) => {
-    const inventario = await Inventario.findById(idProducto);
+ajustarInventario: async (idInventario, diferencia) => {
+    const inventario = await Inventario.findById(idInventario);
     if (!inventario) {
         throw new Error("Producto no encontrado");
     }
