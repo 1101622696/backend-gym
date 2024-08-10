@@ -22,6 +22,8 @@ import interval from "./routes/interval.js"
 
 import httpClientes from './controllers/clientes.js';  // Asegúrate de que la ruta sea correcta
 
+import "./controllers/cronClientes.js";
+
 cron.schedule('0 0 * * *', async () => {
     console.log('Ejecutando cron job para actualizar estados de clientes...');
     await httpClientes.actualizarEstados();
