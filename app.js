@@ -54,3 +54,10 @@ app.listen(process.env.PORT,()=>{
     console.log(`Servidor escuchando en el puerto ${process.env.PORT}`);
     dbConexion()
 })
+
+
+
+app.listen(process.env.PORT,()=>{
+    console.log(`Servidor escuchando en el puerto ${process.env.PORT}`);
+    dbConexion()
+})
